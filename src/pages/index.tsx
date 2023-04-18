@@ -1,8 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import CustomButton from '@/components/CustomButton'
 
 export default function Home() {
     return (
@@ -14,7 +11,18 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <div>시작!</div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <CustomButton size="large" color="sub">
+                        회원가입
+                    </CustomButton>
+
+                    <CustomButton size="medium" color="primary">
+                        로그인
+                    </CustomButton>
+                    <CustomButton size="small" color="sub">
+                        HOOT
+                    </CustomButton>
+                </div>
             </main>
         </>
     )
