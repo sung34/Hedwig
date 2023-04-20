@@ -1,13 +1,7 @@
+import CustomCard from '@/components/customCard'
+import postsData from '@/components/customCard/data'
 import Head from 'next/head'
-<<<<<<< HEAD
-import { Inter } from 'next/font/google'
-
-
-const inter = Inter({ subsets: ['latin'] })
-=======
 import Link from 'next/link'
->>>>>>> c8608bca33e655ddb6951a6ed0697de8bfa55335
-
 export default function Home() {
     return (
         <>
@@ -17,13 +11,14 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-<<<<<<< HEAD
             <main>
-                <div>시작!</div>         
+                {/* mobile size default as 400px */}
+                <div style={{ width: '400px' }}>
+                    {postsData.map(post => (
+                        <CustomCard key={`${post.createdAt}`} type="POST" data={post} />
+                    ))}
+                </div>
             </main>
-=======
-            <main></main>
->>>>>>> c8608bca33e655ddb6951a6ed0697de8bfa55335
         </>
     )
 }

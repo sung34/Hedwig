@@ -1,18 +1,26 @@
-import { DialogProps, IconButtonProps, PopoverProps } from '@mui/material'
+import { DialogProps, PopoverProps } from '@mui/material'
 
-type CardType = 'POST' | 'POSTDETAIL' | 'COMMENT'
-type CardDataType = PostCardData | PostDetailCardData | CommentCardData
-
-export interface IconButtonData {
-  btn: IconButtonProps;
-  count: number;
+export type CardType = 'POST' | 'POSTDETAIL' | 'COMMENT'
+export type CardDataType = PostCardData | PostDetailCardData | CommentCardData
+export type CardHeaderProps = {
+    userName: string
+    createdAt: Date
+    editable: boolean
+    updatedAt?: Date
+    profileImg?: string
+}
+export type CardContentProps = {
+    content: string
+    img?: string
+    
 }
 
 interface CardData {
-  profileImg: string
-  content: string
-  createdAt: Date
-  updatedAt: Date
+    profileImg: string
+    userName: string
+    content: string
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface CommentCardData extends CardData {
@@ -24,14 +32,14 @@ export interface PostCardData extends CardData {
     img?: string
     likes: number
     comments: number
-    iconBtn: IconButtonData[]
+    isLiked: boolean
 }
 
 export interface PostDetailCardData extends PostCardData {
     dialog: DialogProps | PopoverProps | React.ReactNode
 }
 
-export interface Card<C extends CardType, D extends CardDataType> {
-  type: C
-  data: D
+export interface CardProps<C extends CardType, D extends CardDataType> {
+    type: C
+    data: D
 }
