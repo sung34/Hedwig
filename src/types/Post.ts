@@ -8,7 +8,7 @@ export interface PostRequest {
 }
 
 export interface Post extends PostRequest {
-    postId: string
+    id: number
     author: User
     likes: User[]
     comments: Comment[]
