@@ -5,6 +5,7 @@ interface btnProps {
     size?: 'large' | 'medium' | 'small'
     color?: 'primary' | 'sub' | string
     children?: React.ReactNode
+    type?: 'button' | 'reset' | 'submit' | undefined // react-hook-form 사용을 위한 타입 추가
 }
 
 interface ColorMap {
@@ -29,7 +30,16 @@ const CustomButton = ({ size = 'medium', color = 'primary', children, ...rest }:
     const border = '1px solid #5c940d'
 
     return (
-        <Button style={{ width, backgroundColor, borderRadius, color: textColor, border }} {...rest}>
+        <Button
+            style={{
+                width,
+                backgroundColor,
+                borderRadius,
+                color: textColor,
+                border,
+            }}
+            {...rest}
+        >
             {children}
         </Button>
     )
