@@ -36,20 +36,7 @@ const CustomButton = ({ size = 'medium', color = 'primary', children, onClick, o
     const border = '1px solid #5c940d'
 
     return (
-<<<<<<< HEAD
-        <Button
-            style={{
-                width,
-                backgroundColor,
-                borderRadius,
-                color: textColor,
-                border,
-            }}
-            {...rest}
-        >
-=======
         <Button style={{ width, backgroundColor, borderRadius, color: textColor, border }} onClick={clickEvent} {...rest}>
->>>>>>> ca1cafb8909e2b78112731ea9858105f6e04c3c6
             {children}
         </Button>
     )
