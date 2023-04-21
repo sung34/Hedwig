@@ -9,7 +9,7 @@ export interface SignInRequest {
     password: string
 }
 
-export interface SingUpResponse {
+export interface SignUpResponse {
     accessToken: string
     user: {
         username: string
