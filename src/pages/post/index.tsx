@@ -89,7 +89,7 @@ const Post = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
-                <img src="logo.svg" style={{ width: '25px', height: '25px', paddingTop: '10px' }} alt="arrow" />
+                <img src="logo.svg" style={{ width: '30px', height: '30px', paddingTop: '10px' }} alt="arrow" />
             </Link>
 
             <Tabs
