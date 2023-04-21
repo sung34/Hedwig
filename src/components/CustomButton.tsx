@@ -5,12 +5,18 @@ interface btnProps {
     size?: 'large' | 'medium' | 'small'
     color?: 'primary' | 'sub' | string
     children?: React.ReactNode
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, ...args: any[]) => void
+    onClickArgs?: any[]
 }
-
 interface ColorMap {
     [key: string]: string
 }
-const CustomButton = ({ size = 'medium', color = 'primary', children, ...rest }: btnProps) => {
+const CustomButton = ({ size = 'medium', color = 'primary', children, onClick, onClickArgs, ...rest }: btnProps) => {
+    const clickEvent = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (onClick) {
+            onClick(event, ...(onClickArgs || []))
+        }
+    }
     const colorMap: ColorMap = {
         primary: '#5c940d',
         sub: '#ffffff',
@@ -29,7 +35,7 @@ const CustomButton = ({ size = 'medium', color = 'primary', children, ...rest }:
     const border = '1px solid #5c940d'
 
     return (
-        <Button style={{ width, backgroundColor, borderRadius, color: textColor, border }} {...rest}>
+        <Button style={{ width, backgroundColor, borderRadius, color: textColor, border }} onClick={clickEvent} {...rest}>
             {children}
         </Button>
     )
