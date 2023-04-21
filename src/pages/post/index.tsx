@@ -1,4 +1,3 @@
-import CustomizedTabs from '@/components/CustomizedTabs'
 import {
     BottomNavigation,
     BottomNavigationAction,

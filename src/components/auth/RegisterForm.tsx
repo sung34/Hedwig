@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import TextField from '@mui/material/TextField'
 import CustomButton from '../CustomButton'
+import { register } from '@/apis/Auth'
+import { useMutation } from 'react-query'
 
 interface RegisterForm {
     [key: string]: string
@@ -10,7 +12,7 @@ interface RegisterForm {
 const defaultValues: RegisterForm = {
     email: '',
     password: '',
-    username: '',
+    userName: '',
     password_check: '',
 }
 
@@ -25,23 +27,35 @@ function RegisterForm() {
     const passwordRef = useRef('')
     passwordRef.current = watch('password')
 
+    const { mutate, isLoading } = useMutation(register, {
+        onSuccess: () => {
+            alert('회원가입 성공 !')
+            // 성공 시 login 요청
+        },
+        onError: (err) => {
+            console.log(err)
+        },
+    })
+
+    const onSubmitForm = (data: RegisterForm) => {
+        // request data에서 password_check 항목 제거
+        const reqData = Object.assign(
+            {},
+            ...Object.keys(data)
+                .filter((key) => key !== 'password_check')
+                .map((key) => ({ [key]: data[key] })),
+        )
+        console.log(reqData)
+        // register api 호출
+        mutate(reqData)
+    }
+
+    if (isLoading) return <>loading...</>
     return (
         <form
-            onSubmit={handleSubmit(
-                (data: RegisterForm) => {
-                    // password_check 항목 제거
-                    const reqData = Object.assign(
-                        {},
-                        ...Object.keys(data)
-                            .filter((key) => key !== 'password_check')
-                            .map((key) => ({ [key]: data[key] })),
-                    )
-                    console.log(reqData)
-                },
-                () => {
-                    console.log('양식 에러 발생')
-                },
-            )}
+            onSubmit={handleSubmit(onSubmitForm, () => {
+                console.log('양식 에러 발생')
+            })}
         >
             <Controller
                 control={control}
@@ -57,7 +71,7 @@ function RegisterForm() {
             />
             <Controller
                 control={control}
-                name="username"
+                name="userName"
                 rules={{
                     required: '필수 입력 항목입니다.',
                     pattern: {
@@ -65,7 +79,7 @@ function RegisterForm() {
                         message: '3~10자의 영문 소문자와 숫자의 조합이어야 합니다.',
                     },
                 }}
-                render={({ field }) => <TextField {...field} label="username" error={!!errors.username} helperText={errors.username?.message} />}
+                render={({ field }) => <TextField {...field} label="username" error={!!errors.userName} helperText={errors.userName?.message} />}
             />
             <Controller
                 control={control}
