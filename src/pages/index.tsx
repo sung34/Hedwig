@@ -1,7 +1,31 @@
-import CustomCard from '@/components/customCard'
-import postsData from '@/components/customCard/data'
+import CommentCard from '@/components/cards/commentCard'
+import CommentInput from '@/components/cards/commentInput'
+import PostCard from '@/components/cards/postCard'
 import Head from 'next/head'
-import Link from 'next/link'
+const postData = {
+    postId: 1,
+    userName: '사용자 1',
+    profileImg: '/default.png',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    img: '/default.png',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    likeCount: 12,
+    commentCount: 14,
+    isLiked: true,
+    isDetailPost: true,
+    moreBtn: true,
+}
+
+const commentData = {
+    commentId: 4,
+    profileImg: '/default.png',
+    userName: '사용자 1',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    moreBtn: true,
+}
 export default function Home() {
     return (
         <>
@@ -12,12 +36,9 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                {/* mobile size default as 400px */}
-                <div style={{ width: '400px' }}>
-                    {postsData.map(post => (
-                        <CustomCard key={`${post.createdAt}`} type="POST" data={post} />
-                    ))}
-                </div>
+                <PostCard {...postData} />
+                <CommentInput profileImg={"/default.png"} userName='사용자1'/>
+                <CommentCard {...commentData} />
             </main>
         </>
     )

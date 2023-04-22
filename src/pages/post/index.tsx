@@ -1,4 +1,3 @@
-import CustomizedTabs from '@/components/CustomizedTabs'
 import {
     BottomNavigation,
     BottomNavigationAction,
@@ -25,6 +24,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { instance } from '@/apis/instance'
+import { Post } from '@/types/Post'
+import { GetStaticProps } from 'next'
+
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -45,13 +48,23 @@ const navStyles = {
     // 간격 넓히기
     mx: 2,
 }
+type Props = {
+    posts: Post[]
+}
+export const getStaticProps: GetStaticProps<Props> = async () => {
+    const response = await instance.get('/post')
+    const posts = response.data
+    return { props: { posts } }
+}
 
-const Post = () => {
+const Post = ({posts}: Props) => {
+    const myPosts = posts.filter((post: Post) => post.id === 2)
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
     const router = useRouter()
+    console.dir(myPosts)
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
@@ -108,8 +121,8 @@ const Post = () => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-            {/* 가짜 게시글 데이터를 가지고 와서 렌더링 테스트 해볼것! */}
-            <div style={{ flexGrow: 1 }}>게시글이 들어갈 곳</div>
+
+            <div>게시글 들어갈 곳</div>
 
             <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
