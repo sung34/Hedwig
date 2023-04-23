@@ -25,12 +25,13 @@ import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { CSSProperties, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { instance } from '@/apis/instance'
 import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
+import { axiosInstance } from '@/apis/axios'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -57,16 +58,43 @@ type Props = {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-    const response = await instance.get('/post')
+    const response = await axiosInstance.get('/post')
     const posts = response.data
     return { props: { posts } }
 }
 const Post = ({ posts }: Props) => {
-    const myPosts = posts.filter((post: Post) => post.id === 2) //  API...
+    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
+
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
+    const [startY, setStartY] = useState(0)
+    const [lastY, setLastY] = useState(0)
+    const cardContainerRef = useRef<HTMLDivElement>(null)
+
+    const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+        setStartY(event.currentTarget.getBoundingClientRect().top)
+        setLastY(event.touches[0].clientY)
+    }
+
+    const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+        const deltaY = lastY - event.touches[0].clientY
+        setLastY(event.touches[0].clientY)
+        if (cardContainerRef.current) {
+            cardContainerRef.current.scrollTop += deltaY
+        }
+    }
+
+    const handleTouchEnd = () => {
+        const deltaY = lastY - startY
+        if (deltaY > 100) {
+            setRefreshing(true)
+            location.reload()
+        }
+    }
+
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
@@ -124,33 +152,21 @@ const Post = ({ posts }: Props) => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-            {value === 'my' ? (
-                <div style={{ flexGrow: 1 }}>
-                    {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
-                    {myPosts.map((post: Post) => (
-                        <Card key={post.id} sx={{ minWidth: 275 }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    {post.title}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {post.content}
-                                </Typography>
-                                <Typography variant="body2">
-                                    well meaning and kindly.
-                                    <br />
-                                    {'"a benevolent smile"'}
-                                </Typography>
-                                <CustomButton onClick={() => console.log(post.id)}>너 아이디 뭐야</CustomButton>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            ) : (
-                <div style={{ flexGrow: 1 }}>
+            <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+                <div
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    style={{
+                        height: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: refreshing ? '#fafafa' : '#fff',
+                        transition: 'background-color 0.3s ease',
+                    }}
+                >
                     {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
                     {posts.map((post: Post) => (
                         <Card key={post.id} sx={{ minWidth: 275 }}>
@@ -159,22 +175,22 @@ const Post = ({ posts }: Props) => {
                                     Word of the Day
                                 </Typography>
                                 <Typography variant="h5" component="div">
-                                    {post.title}
+                                    {post.userName}
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                     {post.content}
                                 </Typography>
                                 <Typography variant="body2">
-                                    well meaning and kindly.
+                                    좋아요 {post.likesCount}개
                                     <br />
-                                    {'"a benevolent smile"'}
+                                    댓글 {post.commentsCount}개
                                 </Typography>
                                 <CustomButton onClick={() => console.log(post.id)}>너 아이디 뭐야</CustomButton>
                             </CardContent>
                         </Card>
                     ))}
                 </div>
-            )}
+            </div>
 
             <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px', position: 'fixed', bottom: '0' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
