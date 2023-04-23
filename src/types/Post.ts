@@ -2,7 +2,6 @@ import { User } from './User'
 import { Comment } from './Comment'
 
 export interface PostRequest {
-    title: string
     content: string
     img?: string
 }

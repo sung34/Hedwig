@@ -96,6 +96,7 @@ const Post = ({ posts }: Props) => {
     }
 
     const router = useRouter()
+    console.dir(myPosts)
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
