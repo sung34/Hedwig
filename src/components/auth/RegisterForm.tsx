@@ -2,8 +2,10 @@ import React, { useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import TextField from '@mui/material/TextField'
 import CustomButton from '../CustomButton'
-import { register } from '@/apis/Auth'
+import { login, register } from '@/apis/Auth'
 import { useMutation } from 'react-query'
+import { useRouter } from 'next/router'
+import { setCookie } from '@/utils/cookies'
 
 interface RegisterForm {
     [key: string]: string
@@ -27,13 +29,21 @@ function RegisterForm() {
     const passwordRef = useRef('')
     passwordRef.current = watch('password')
 
-    const { mutate, isLoading } = useMutation(register, {
-        onSuccess: () => {
-            alert('회원가입 성공 !')
-            // 성공 시 login 요청
+    const router = useRouter()
+
+    const { mutate: registerMutate, isLoading } = useMutation(register, {
+        onSuccess: (data) => {
+            console.log('회원가입 성공!')
+            // 쿠키 설정
+            setCookie('accessToken', data.accessToken, { path: '/', maxAge: data.content.exp - data.content.iat })
+            // 성공 시 login 페이지로 이동
+            router.push({
+                pathname: '/auth/login',
+                query: { authLogin: true },
+            })
         },
         onError: (err) => {
-            console.log(err)
+            console.log(`에러는 무엇인가요 ? : ${err}`)
         },
     })
 
@@ -47,7 +57,7 @@ function RegisterForm() {
         )
         console.log(reqData)
         // register api 호출
-        mutate(reqData)
+        registerMutate(reqData)
     }
 
     if (isLoading) return <>loading...</>
