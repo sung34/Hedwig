@@ -31,6 +31,7 @@ import { instance } from '@/apis/instance'
 import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
+
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -51,6 +52,15 @@ const navStyles = {
     // 간격 넓히기
     mx: 2,
 }
+type Props = {
+    posts: Post[]
+}
+export const getStaticProps: GetStaticProps<Props> = async () => {
+    const response = await instance.get('/post')
+    const posts = response.data
+    return { props: { posts } }
+}
+
 
 type Props = {
     posts: Post[]
@@ -63,11 +73,13 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 }
 const Post = ({ posts }: Props) => {
     const myPosts = posts.filter((post: Post) => post.id === 2) //  API...
+
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
     const router = useRouter()
+    console.dir(myPosts)
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
@@ -124,6 +136,7 @@ const Post = ({ posts }: Props) => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
+
             {value === 'my' ? (
                 <div style={{ flexGrow: 1 }}>
                     {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
@@ -175,6 +188,7 @@ const Post = ({ posts }: Props) => {
                     ))}
                 </div>
             )}
+
 
             <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px', position: 'fixed', bottom: '0' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
