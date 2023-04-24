@@ -32,6 +32,7 @@ import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
+import PostCard from '@/components/cards/postCard'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -62,6 +63,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     const posts = response.data
     return { props: { posts } }
 }
+
 const Post = ({ posts }: Props) => {
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
 
@@ -96,7 +98,6 @@ const Post = ({ posts }: Props) => {
     }
 
     const router = useRouter()
-    console.dir(myPosts)
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
@@ -155,45 +156,43 @@ const Post = ({ posts }: Props) => {
             </Tabs>
             <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
                 <div
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
+                    // onTouchStart={handleTouchStart}
+                    // onTouchMove={handleTouchMove}
+                    // onTouchEnd={handleTouchEnd}
                     style={{
-                        height: '100vh',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: refreshing ? '#fafafa' : '#fff',
                         transition: 'background-color 0.3s ease',
+                        paddingBottom: '75px',
                     }}
                 >
                     {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
-                    {posts.map((post: Post) => (
-                        <Card key={post.id} sx={{ minWidth: 275 }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    {post.userName}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {post.content}
-                                </Typography>
-                                <Typography variant="body2">
-                                    좋아요 {post.likesCount}개
-                                    <br />
-                                    댓글 {post.commentsCount}개
-                                </Typography>
-                                <CustomButton onClick={() => console.log(post.id)}>너 아이디 뭐야</CustomButton>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    {posts.map((post: Post) => {
+                        const postData = {
+                            postId: 1,
+                            userName: '사용자 1',
+                            profileImg: '/default.png',
+                            content:
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.lskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfj',
+                            img: '/default.png',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            likeCount: 12,
+                            commentCount: 14,
+                            isLiked: true,
+                            isDetailPost: false,
+                            moreBtn: true,
+                            commentOnly: false,
+                        }
+                        return <PostCard key={post.id} {...postData} />
+                    })}
                 </div>
             </div>
 
-            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px', position: 'fixed', bottom: '0' }}>
+            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ position: 'fixed', bottom: '0' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
                 <BottomNavigationAction label="home" value="home" icon={<HomeIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/" />
                 <BottomNavigationAction label="profile" value="profile" icon={<AccountCircleIcon sx={{ fontSize: '30px' }} />} sx={navStyles} onClick={toggleDrawer(true)} />

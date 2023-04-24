@@ -34,7 +34,6 @@ import { useState } from 'react'
  * @author 임성열
  */
 function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId, img, likeCount, commentCount, isLiked, isDetailPost, moreBtn }: PostCardData) {
-
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
 
@@ -81,12 +80,12 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
 
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <>
+        <Box sx={{ maxHeight: '430px' }}>
             <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
                 {bodyContent()}
                 {footerContent()}
             </CustomCard>
-        </>
+        </Box>
     )
 }
 

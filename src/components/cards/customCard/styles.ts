@@ -36,10 +36,12 @@ export const cardHeaderStyle = {
  */
 export const cardContentStyle = {
     width: 'inherit',
+    height: '100px',
     padding: '0',
     margin: 'auto',
     lineHeight: '1.5em',
-    overflowWrap: 'break-word',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     cursor: 'pointer',
 }
 
