@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Box, IconButton, TextField } from '@mui/material'
 import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
-import { instance } from '@/apis/instance'
 import CustomButton from '@/components/CustomButton'
+import { axiosInstance } from '@/apis/axios'
 interface PostInput {
     body: string
     img: File | null
