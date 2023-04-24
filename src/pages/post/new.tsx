@@ -47,7 +47,7 @@ function CreatePost() {
         const formData = new FormData()
         formData.append('body', postInput.body)
         formData.append('img', postInput.img as File)
-        await instance.post('/post', formData)
+        await axiosInstance.post('/post', formData)
 
         console.log('handlePostSubmit result:', postInput)
     }
