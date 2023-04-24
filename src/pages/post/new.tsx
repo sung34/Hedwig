@@ -3,15 +3,21 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
 import { instance } from '@/apis/instance'
 import CustomButton from '@/components/CustomButton'
+interface PostInput {
+    body: string
+    img: File | null
+}
 
 function CreatePost() {
     const mainColor = '#5c940d'
-    const [postInput, setPostInput] = useState({ body: '', img: new Blob() })
+    const [postInput, setPostInput] = useState<PostInput>({ body: '', img: null })
     const [previewUrl, setPreviewUrl] = useState('')
 
     // 미디어 추가 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, files } = e.target
+        console.log('Files:', files)
+
         const file = files && files[0]
         if (files) {
             setPostInput({ ...postInput, [name]: files[0] })
@@ -22,11 +28,12 @@ function CreatePost() {
         if (file) {
             const reader = new FileReader()
             reader.onloadend = () => {
+                console.log('File read successfully:', reader.result)
                 setPreviewUrl(reader.result as string)
             }
             reader.readAsDataURL(file)
         }
-        console.dir(postInput)
+        console.log('handleChange result:', postInput, file)
     }
 
     //미디어 지우기
@@ -39,10 +46,10 @@ function CreatePost() {
         e.preventDefault()
         const formData = new FormData()
         formData.append('body', postInput.body)
-        formData.append('img', postInput.img)
+        formData.append('img', postInput.img as File)
         await instance.post('/post', formData)
 
-        console.dir(postInput)
+        console.log('handlePostSubmit result:', postInput)
     }
 
     return (
