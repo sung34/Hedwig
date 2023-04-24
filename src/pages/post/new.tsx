@@ -1,30 +1,24 @@
 import React, { useState } from 'react'
 import { Box, IconButton, TextField } from '@mui/material'
 import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
+import { instance } from '@/apis/instance'
 import CustomButton from '@/components/CustomButton'
 
-type PostFormProps = {
-    submitHandler: (post: FormData) => void
-    initialValue?: { body: string; img: string }
-}
-
-function CreatePost({ submitHandler, initialValue = { body: '', img: '' } }: PostFormProps) {
+function CreatePost() {
     const mainColor = '#5c940d'
-    const [postInput, setPostInput] = useState(initialValue)
-    const [content, setContent] = useState('')
+    const [postInput, setPostInput] = useState({ body: '', img: new Blob() })
     const [previewUrl, setPreviewUrl] = useState('')
 
-    const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setContent(e.target.value)
-        const content = e.target.value
-        if (content.length <= 150) {
-            setContent(content)
+    // 미디어 추가 함수
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, files } = e.target
+        const file = files && files[0]
+        if (files) {
+            setPostInput({ ...postInput, [name]: files[0] })
+        } else {
+            setPostInput({ ...postInput, [name]: value })
         }
-    }
-
-    // 다른 확장자 추가를 시도할 시, 미디어가 교체되고 한 개의 미디어만 출력됩니다.
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files && e.target.files[0]
+        // preview condition
         if (file) {
             const reader = new FileReader()
             reader.onloadend = () => {
@@ -32,34 +26,23 @@ function CreatePost({ submitHandler, initialValue = { body: '', img: '' } }: Pos
             }
             reader.readAsDataURL(file)
         }
+        console.dir(postInput)
     }
 
+    //미디어 지우기
     const handleClearPreview = () => {
         setPreviewUrl('')
-        setPostInput((prevState) => ({ ...prevState, img: '' }))
-        // const formData = new FormData()
-        // formData.append('body', content)
-        // if (postInput.img) {
-        //     formData.append('img', postInput.img)
-        // }
-        // submitHandler(formData)
-        // setContent('')
-        // setPreviewUrl('')
     }
 
-    // 글쓰기에 추가한 내용 모두 저장할 함수
-    const handlePostSubmit = () => {
-        // e.preventDefault();
-        setContent('')
-        setPreviewUrl('')
+    // 글쓰기에 추가한 내용 모두 저장 할 함수
+    const handlePostSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         const formData = new FormData()
-        formData.append('body', content)
-        if (postInput.img) {
-            formData.append('img', postInput.img)
-        }
-        // submitHandler(formData)
-        console.log(content, postInput.img, formData)
-        submitHandler(formData)
+        formData.append('body', postInput.body)
+        formData.append('img', postInput.img)
+        await instance.post('/post', formData)
+
+        console.dir(postInput)
     }
 
     return (
@@ -69,14 +52,16 @@ function CreatePost({ submitHandler, initialValue = { body: '', img: '' } }: Pos
                     <IconButton href="/post" aria-label="back" sx={{ color: `${mainColor}` }}>
                         <ArrowBack />
                     </IconButton>
-                    <CustomButton onClick={handlePostSubmit} type="submit" size="small" color="primary">
-                        HOOT
-                    </CustomButton>
+                    <form onSubmit={handlePostSubmit}>
+                        <CustomButton type="submit" size="small" color="primary">
+                            HOOT
+                        </CustomButton>
+                    </form>
                 </Box>
                 <TextField
                     placeholder="글을 작성해 주세요"
-                    value={content}
-                    onChange={handleContentChange}
+                    onChange={handleChange}
+                    inputProps={{ name: 'body' }}
                     fullWidth
                     multiline
                     rows={6}
@@ -96,15 +81,15 @@ function CreatePost({ submitHandler, initialValue = { body: '', img: '' } }: Pos
                 <Box display="flex" alignItems="center">
                     <IconButton component="label" htmlFor="photo-input" sx={{ color: `${mainColor}`, width: '2em' }}>
                         <PhotoOutlined />
-                        <input type="file" id="photo-input" accept="image/*" hidden onChange={handleFileChange} />
+                        <input name="img" type="file" id="photo-input" accept="image/*" hidden onChange={handleChange} />
                     </IconButton>
                     <IconButton component="label" htmlFor="video-input" sx={{ color: `${mainColor}`, width: '2em' }}>
                         <VideoFileOutlined />
-                        <input type="file" id="video-input" accept="video/*" hidden onChange={handleFileChange} />
+                        <input name="img" type="file" id="video-input" accept="video/*" hidden onChange={handleChange} />
                     </IconButton>
                     <IconButton component="label" htmlFor="gif-input" sx={{ color: `${mainColor}`, width: '2em' }}>
                         <Gif />
-                        <input type="file" id="gif-input" accept="image/*" hidden onChange={handleFileChange} />
+                        <input name="img" type="file" id="gif-input" accept="image/*" hidden onChange={handleChange} />
                     </IconButton>
                 </Box>
             </Box>
