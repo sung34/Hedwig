@@ -3,18 +3,13 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
 import { instance } from '@/apis/instance'
 import CustomButton from '@/components/CustomButton'
-import { StringLiteralType } from 'typescript'
-
 interface PostInput {
     body: string
     img: File | null
-    // img: string | null
-    // img: Blob | null | string
 }
 
 function CreatePost() {
     const mainColor = '#5c940d'
-    // const [postInput, setPostInput] = useState<PostInput>({ body: '', img: null })
     const [postInput, setPostInput] = useState<PostInput>({ body: '', img: null })
     const [previewUrl, setPreviewUrl] = useState('')
 
@@ -51,7 +46,6 @@ function CreatePost() {
         e.preventDefault()
         const formData = new FormData()
         formData.append('body', postInput.body)
-        // formData.append('img', postInput.img as File)
         formData.append('img', postInput.img as File)
         await instance.post('/post', formData)
 
