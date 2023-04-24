@@ -28,12 +28,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
 import React, { CSSProperties, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { instance } from '@/apis/instance'
 import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
 import PostCard from '@/components/cards/postCard'
+import { getPosts } from '@/apis/Post'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -60,8 +60,7 @@ type Props = {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-    const response = await axiosInstance.get('/post')
-    const posts = response.data
+    const posts = await getPosts()
     return { props: { posts } }
 }
 
