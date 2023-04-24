@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     CardContent,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -71,31 +72,8 @@ const Post = ({ posts }: Props) => {
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
-    const [refreshing, setRefreshing] = useState(false)
-    const [startY, setStartY] = useState(0)
-    const [lastY, setLastY] = useState(0)
+    const [loadingVisible, setLoadingVisible] = useState(false)
     const cardContainerRef = useRef<HTMLDivElement>(null)
-
-    const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-        setStartY(event.currentTarget.getBoundingClientRect().top)
-        setLastY(event.touches[0].clientY)
-    }
-
-    const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-        const deltaY = lastY - event.touches[0].clientY
-        setLastY(event.touches[0].clientY)
-        if (cardContainerRef.current) {
-            cardContainerRef.current.scrollTop += deltaY
-        }
-    }
-
-    const handleTouchEnd = () => {
-        const deltaY = lastY - startY
-        if (deltaY > 100) {
-            setRefreshing(true)
-            location.reload()
-        }
-    }
 
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -116,6 +94,14 @@ const Post = ({ posts }: Props) => {
     const logout = (): void => {
         //TODO 페이지만 이동할게 아니라 api 호출을 통해서 로그아웃 로직을 요청해야한다!
         router.push('/')
+    }
+
+    const handleTouchStart = () => {
+        setLoadingVisible(true)
+    }
+
+    const handleTouchEnd = () => {
+        setLoadingVisible(false)
     }
 
     const list = () => (
@@ -155,16 +141,18 @@ const Post = ({ posts }: Props) => {
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
             <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+                <div style={{ textAlign: 'center' }}>
+                    <CircularProgress />
+                </div>
                 <div
-                    // onTouchStart={handleTouchStart}
-                    // onTouchMove={handleTouchMove}
-                    // onTouchEnd={handleTouchEnd}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: refreshing ? '#fafafa' : '#fff',
+                        backgroundColor: '#fff',
                         transition: 'background-color 0.3s ease',
                         paddingBottom: '75px',
                     }}
