@@ -6,5 +6,3 @@ export const instance = axios.create({
         'Content-Type': 'multipart/form-data',
     },
 })
-
-

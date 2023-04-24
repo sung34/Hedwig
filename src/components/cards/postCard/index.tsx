@@ -34,7 +34,6 @@ import { useState } from 'react'
  * @author 임성열
  */
 function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId, img, likeCount, commentCount, isLiked, isDetailPost, moreBtn }: PostCardData) {
-
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
 
@@ -51,7 +50,7 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-                <CardContent sx={cardContentStyle}>{content}</CardContent>
+                <CardContent sx={{ ...cardContentStyle, height: `${isDetailPost ? 'auto' : '100px'}` }}>{content}</CardContent>
                 {/* img말고 동영상도 받을경우 media로 변경 */}
                 {img && <CardMedia component={cardMediaComponent} src={img} sx={cardMediaStyle} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
                 <Divider />
@@ -81,12 +80,12 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
 
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <>
+        <Box>
             <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
                 {bodyContent()}
                 {footerContent()}
             </CustomCard>
-        </>
+        </Box>
     )
 }
 
