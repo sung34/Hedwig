@@ -46,7 +46,7 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-                <StyledCardContent>{content}</StyledCardContent>
+                <StyledCardContent sx={{ height: isDetailPost ? 'auto':'100px' }}>{content}</StyledCardContent>
 
                 <Box>
                     {img && <StyledCardMedia image={img} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
