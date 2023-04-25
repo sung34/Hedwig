@@ -3,17 +3,21 @@
 import React from 'react'
 import CustomButton from '@/components/CustomButton'
 import Link from 'next/link'
+import Box from '@mui/material/Box'
 
 function AuthPage() {
     return (
-        <div>
-            <p>서비스를 이용하시려면 로그인이 필요합니다.</p>
-            <Link href="/auth/login">
-                <CustomButton>로그인</CustomButton>
-            </Link>
-            <Link href="/auth/register">
-                <CustomButton>가입하기</CustomButton>
-            </Link>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
+            <img src="logo.svg" style={{ width: '50px', height: '50px', paddingTop: '10px' }} alt="arrow" />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
+                <h1>Hedwig</h1>
+                <Link href="/auth/login">
+                    <CustomButton size={'large'}>로그인</CustomButton>
+                </Link>
+                <Link href="/auth/register">
+                    <CustomButton size={'large'}>가입하기</CustomButton>
+                </Link>
+            </Box>
         </div>
     )
 }
