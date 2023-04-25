@@ -8,11 +8,11 @@ interface CommentInputProps {
     userName: string
 }
 
-function CommentInput({ profileImg }: CommentInputProps) {
+function CommentInput({ profileImg, userName }: CommentInputProps) {
     const [showCommentInfo, setshowCommentInfo] = useState(false) // TextField와 LetterCounter의 보이기/숨기기 상태를 관리합니다.
     const [letterCount, setLetterCount] = useState(0)
     const [label, setLabel] = useState('')
-    
+
     const [commentContent, setCommentContent] = useState('Write a comment...')
     const handleFocus = () => {
         setshowCommentInfo(true)
@@ -49,7 +49,9 @@ function CommentInput({ profileImg }: CommentInputProps) {
                                 {letterCount}
                             </Typography>
                         </Box>
-                        <Button onClick={() => alert(commentContent)} disabled={letterCount === 0 || letterCount > 150}>Hoot!</Button>
+                        <Button onClick={() => alert(commentContent)} disabled={letterCount === 0 || letterCount > 150}>
+                            Hoot!
+                        </Button>
                     </Box>
                 )}
             </Box>
