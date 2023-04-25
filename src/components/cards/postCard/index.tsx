@@ -1,7 +1,7 @@
 import { PostCardData } from '@/types/Card'
 
-import { Button, CardContent, Box, CardMedia, Divider, Typography } from '@mui/material'
-import { cardContentStyle, cardIconButtonStyle, cardMediaStyle } from '../customCard/styles'
+import { Box, Divider, Typography, IconButton } from '@mui/material'
+import { StyledCardContent, StyledCardMedia, StyledPostFooter } from '../styles'
 import { FavoriteBorder, Favorite, ChatBubbleOutline } from '@mui/icons-material'
 
 import { timeSince } from '../timeSince'
@@ -34,14 +34,8 @@ import { useState } from 'react'
  * @author 임성열
  */
 function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId, img, likeCount, commentCount, isLiked, isDetailPost, moreBtn }: PostCardData) {
-
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
-
-    // png, jpg, jpeg면 CardMedia의 component속성을 img로 설정
-    // 현재는 img만 받는다는 전제로 진행중
-    const isImage = /\.(png|jpg|jpeg)$/i.test(img || ' ')
-    const cardMediaComponent = isImage ? 'img' : 'video'
 
     // 작성시간과 수정시간이 같다면 작성된 시간 기준으로 문자열 생성
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
@@ -51,9 +45,11 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-                <CardContent sx={cardContentStyle}>{content}</CardContent>
-                {/* img말고 동영상도 받을경우 media로 변경 */}
-                {img && <CardMedia component={cardMediaComponent} src={img} sx={cardMediaStyle} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
+                <StyledCardContent>{content}</StyledCardContent>
+
+                <Box>
+                    {img && <StyledCardMedia image={img} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
+                    </Box>
                 <Divider />
                 {isDetailPost && <Typography>{createdAt.toLocaleString()}</Typography>}
             </>
@@ -63,19 +59,27 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
     // 게시글 하단에 들어갈 컴포넌트
     const footerContent = (): React.ReactNode => {
         return (
-            <Box sx={cardIconButtonStyle}>
-                <Button startIcon={<ChatBubbleOutline />} endIcon={commentCount} onClick={() => console.log(`Post ID: ${postId}\n Comment Button Clicked`)} />
-
-                <Button
-                    startIcon={liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
-                    endIcon={likeCount}
-                    onClick={() => {
-                        console.log(`Post ID: ${postId}\n Like Button Clicked`)
-                        setLiked((prev) => !prev)
-                        console.log(`Request Like status change to server as ${liked}`)
-                    }}
-                />
-            </Box>
+            <StyledPostFooter>
+                <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
+                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${postId}\n Comment Button Clicked`)}>
+                        <ChatBubbleOutline />
+                    </IconButton>
+                    <Typography>{commentCount}</Typography>
+                </Box>
+                <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
+                    <IconButton
+                        sx={{ padding: '0', mr: '0.4em' }}
+                        onClick={() => {
+                            console.log(`Post ID: ${postId}\n Like Button Clicked`)
+                            setLiked((prev) => !prev)
+                            console.log(`Request Like status change to server as ${liked}`)
+                        }}
+                    >
+                        {liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
+                    </IconButton>
+                    <Typography>{likeCount}</Typography>
+                </Box>
+            </StyledPostFooter>
         )
     }
 

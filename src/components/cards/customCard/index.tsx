@@ -1,5 +1,5 @@
-import { Avatar, Grid, Card, CardHeader, IconButton } from '@mui/material'
-import { cardStyle, cardHeaderStyle } from './styles'
+import { Avatar, Grid, IconButton } from '@mui/material'
+import { StyledCard, StyledCardHeader } from '../styles'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { CustomCardProps } from '@/types/Card'
@@ -23,15 +23,17 @@ import { CustomCardProps } from '@/types/Card'
 * @author 임성열
  */
 function CustomCard({ profileImg, userName, timeStamp, children, moreBtn }: CustomCardProps) {
+    // onMoreClick(id, callbackFunction) postCard moreBtn, CommentCard morebtn onclick
+    // props-> props.fns { onClickMore: () => () } || helperFunction 
+    // CommentCard랑 PostCard 안에 각각 function 만들어도 되구요
     return (
-        <Card sx={cardStyle}>
+        <StyledCard>
             <Grid p={'0 1em'} direction={'row'} container>
                 <Grid item xs={2.5}>
                     <Avatar src={profileImg} />
                 </Grid>
                 <Grid item xs={9.5}>
-                    <CardHeader
-                        sx={cardHeaderStyle}
+                    <StyledCardHeader
                         title={userName}
                         subheader={timeStamp && timeStamp}
                         action={ moreBtn &&
@@ -45,7 +47,7 @@ function CustomCard({ profileImg, userName, timeStamp, children, moreBtn }: Cust
                 {/* 여기까지 Grid Items */}
             </Grid>
             {/* 여기까지 Grid Container */}
-        </Card>
+        </StyledCard>
     )
 }
 
