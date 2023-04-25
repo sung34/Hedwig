@@ -34,7 +34,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 const PostDetail = ({ post }: Props) => {
     console.log(post)
 
-    return <div>{<CommentInput profileImg={'/default.png'} userName={post.userName} />}</div>
+    return <div>{/*<CommentInput profileImg={'/default.png'} userName={post.userName} />*/}</div>
 }
 
 export default PostDetail

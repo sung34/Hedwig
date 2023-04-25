@@ -36,9 +36,11 @@ function CommentInput({ profileImg, userName }: CommentInputProps) {
         maxRows: 5,
         variant: 'outlined' as const,
     }
+    /** 커멘트를 추가하는메소드! */
+    // 댓글을 추가한다! 필요한 요소 : 유저 id , postID , 콘텐츠
 
     return (
-        <CustomCard profileImg={profileImg} userName="" timeStamp="" moreBtn={false}>
+        <CustomCard profileImg={profileImg} userName={userName} timeStamp="" moreBtn={false}>
             <TextField sx={inputStyle} fullWidth multiline {...textFieldProps} />
             <Box>
                 {showCommentInfo && (

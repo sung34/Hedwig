@@ -29,13 +29,14 @@ import Link from 'next/link'
 import React, { CSSProperties, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
-import { GetStaticProps } from 'next'
+import { GetServerSideProps, GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
 import PostCard from '@/components/cards/postCard'
-import { getPosts } from '@/apis/Post'
+import { getPost, getPosts } from '@/apis/Post'
 import { verify } from '@/apis/Auth'
 import { AuthResponse, userPayload } from '@/types/Auth'
+import { useQuery, useQueryClient } from 'react-query'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -63,24 +64,28 @@ type Props = {
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const posts = await getPosts()
-    // const verifyData = await verify()
-    // const { username } = verifyData.content
     return {
         props: {
             posts,
-            // currentUser: { username },
         },
     }
 }
 
-const Post = ({ posts }: Props /*currentUser: userPayload['content']['username']*/) => {
+const Post = ({ posts }: Props) => {
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
+    const { data: allPost } = useQuery('posts', getPosts, {
+        initialData: posts,
+    })
+
+    const { data: userdata } = useQuery('userdata', verify)
+    const currentUser = userdata?.content.username
 
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
     const [loadingVisible, setLoadingVisible] = useState(false)
+    const [likesCount, setLikesCount] = useState(0)
     const cardContainerRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -110,6 +115,8 @@ const Post = ({ posts }: Props /*currentUser: userPayload['content']['username']
     const handleTouchEnd = () => {
         setLoadingVisible(false)
     }
+
+    const queryClient = useQueryClient()
 
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -164,26 +171,28 @@ const Post = ({ posts }: Props /*currentUser: userPayload['content']['username']
                         paddingBottom: '75px',
                     }}
                 >
-                    {posts.map((post: Post) => {
+                    {allPost.map((post: Post) => {
                         /** 동일한 유저가 좋아요 했다는것을 어떻게 파악할까  */
                         // loginUser 가 post에 있는 userName과 같은가?
 
-                        const postData = {
-                            postId: post.id,
-                            userName: post.userName,
-                            profileImg: '/default.png',
-                            content: post.content,
-                            img: post.img,
-                            createdAt: new Date(post.createdAt),
-                            updatedAt: new Date(post.updatedAt),
-                            likeCount: post.likesCount,
-                            commentCount: post.commentsCount,
-                            isLiked: true,
-                            isDetailPost: false,
-                            moreBtn: true,
-                            commentOnly: false,
-                        }
-                        return <PostCard key={post.id} {...postData} />
+                        // const postData = {
+                        //     postId: post.id,
+                        //     userName: post.userName,
+                        //     profileImg: '/default.png',
+                        //     content: post.content,
+                        //     img: post.img,
+                        //     createdAt: new Date(post.createdAt),
+                        //     updatedAt: new Date(post.updatedAt),
+                        //     likeCount: post.likesCount,
+                        //     commentCount: post.commentsCount,
+                        //     isLiked: post.isLiked,
+                        //     isDetailPost: false,
+                        //     moreBtn: currentUser === post.userName,
+                        //     commentOnly: false,
+                        // }
+                        const moreBtn = currentUser === post.userName
+
+                        return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
                     })}
                 </div>
             </div>
