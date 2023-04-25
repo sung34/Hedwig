@@ -7,6 +7,8 @@ import { setCookie } from '@/utils/cookies'
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
+import { Box, IconButton } from '@mui/material'
+import { ArrowBack } from '@mui/icons-material'
 
 function LoginPage() {
     const router = useRouter()
@@ -19,13 +21,31 @@ function LoginPage() {
             console.log(`로그인 에러: ${err}`)
         },
     })
+    const onArrowBackClick = () => {
+        router.back()
+    }
 
     if (isLoading) return <>loading...</>
     return (
-        <div>
-            <p>계정에 로그인하세요.</p>
-            <LoginForm mutate={mutate} />
-        </div>
+        <>
+            <IconButton onClick={onArrowBackClick} href="/post" aria-label="back" sx={{ color: '#5c940d', position: 'absolute', top: '10px', left: '10px' }}>
+                <ArrowBack />
+            </IconButton>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
+                <img src="../logo.svg" style={{ width: '50px', height: '50px', paddingTop: '10px' }} alt="arrow" />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <h1>Hedwig 먹이주기</h1>
+                    <LoginForm mutate={mutate} />
+                </Box>
+            </div>
+        </>
     )
 }
 
