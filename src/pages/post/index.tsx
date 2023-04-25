@@ -3,6 +3,9 @@ import {
     BottomNavigationAction,
     Box,
     Button,
+    Card,
+    CardContent,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -16,14 +19,21 @@ import {
     ListItemText,
     Tab,
     Tabs,
+    Typography,
 } from '@mui/material'
 import CreateIcon from '@mui/icons-material/Create'
 import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { CSSProperties, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import { Post } from '@/types/Post'
+import { GetStaticProps } from 'next'
+import CustomButton from '@/components/CustomButton'
+import { axiosInstance } from '@/apis/axios'
+import PostCard from '@/components/cards/postCard'
+import { getPosts } from '@/apis/Post'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -45,11 +55,25 @@ const navStyles = {
     mx: 2,
 }
 
-const Post = () => {
+type Props = {
+    posts: Post[]
+}
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+    const posts = await getPosts()
+    return { props: { posts } }
+}
+
+const Post = ({ posts }: Props) => {
+    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
+
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
+    const [loadingVisible, setLoadingVisible] = useState(false)
+    const cardContainerRef = useRef<HTMLDivElement>(null)
+
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
@@ -71,6 +95,14 @@ const Post = () => {
         router.push('/')
     }
 
+    const handleTouchStart = () => {
+        setLoadingVisible(true)
+    }
+
+    const handleTouchEnd = () => {
+        setLoadingVisible(false)
+    }
+
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
@@ -89,7 +121,7 @@ const Post = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
-                <img src="logo.svg" style={{ width: '25px', height: '25px', paddingTop: '10px' }} alt="arrow" />
+                <img src="logo.svg" style={{ width: '30px', height: '30px', paddingTop: '10px' }} alt="arrow" />
             </Link>
 
             <Tabs
@@ -107,10 +139,47 @@ const Post = () => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-            {/* 가짜 게시글 데이터를 가지고 와서 렌더링 테스트 해볼것! */}
-            <div style={{ flexGrow: 1 }}>게시글이 들어갈 곳</div>
+            <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+                <div style={{ textAlign: 'center' }}>
+                    <CircularProgress />
+                </div>
+                <div
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#fff',
+                        transition: 'background-color 0.3s ease',
+                        paddingBottom: '75px',
+                    }}
+                >
+                    {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
+                    {posts.map((post: Post) => {
+                        const postData = {
+                            postId: 1,
+                            userName: '사용자 1',
+                            profileImg: '/default.png',
+                            content:
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.lskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfj',
+                            img: '/default.png',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            likeCount: 12,
+                            commentCount: 14,
+                            isLiked: true,
+                            isDetailPost: false,
+                            moreBtn: true,
+                            commentOnly: false,
+                        }
+                        return <PostCard key={post.id} {...postData} />
+                    })}
+                </div>
+            </div>
 
-            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px' }}>
+            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ position: 'fixed', bottom: '0' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
                 <BottomNavigationAction label="home" value="home" icon={<HomeIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/" />
                 <BottomNavigationAction label="profile" value="profile" icon={<AccountCircleIcon sx={{ fontSize: '30px' }} />} sx={navStyles} onClick={toggleDrawer(true)} />
