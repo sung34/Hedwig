@@ -2,7 +2,7 @@ name: CI-CD pipeline to AWS
 env:
     EB_S3_BUCKET_NAME: 'fe4-react5-hedwig'
     EB_APPLICATION_NAME: 'HedwigBE'
-    EB_ENVIRONMENT_NAME: 'Hedwigbe-env'
+    EB_ENVIRONMENT_NAME: 'Hedwigfe-env'
     DEPLOY_PACKAGE_NAME: 'node-app-${{ github.sha }}.zip'
     AWS_REGION_NAME: 'ap-northeast-2'
 
