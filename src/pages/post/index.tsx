@@ -24,9 +24,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { instance } from '@/apis/instance'
 import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
+import { axiosInstance } from '@/apis/axios'
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -52,7 +52,7 @@ type Props = {
     posts: Post[]
 }
 export const getStaticProps: GetStaticProps<Props> = async () => {
-    const response = await instance.get('/post')
+    const response = await axiosInstance.get('/post')
     const posts = response.data
     return { props: { posts } }
 }
