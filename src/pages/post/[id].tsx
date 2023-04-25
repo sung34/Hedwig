@@ -4,7 +4,8 @@ import { Post } from '@/types/Post'
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
-import dynamic from 'next/dynamic'
+import CommentInput from '@/components/cards/commentInput'
+import PostCard from '@/components/cards/postCard'
 
 type Props = {
     post: Post
@@ -26,14 +27,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     const data = await res.json()
     const post = data
     return {
-        props: post,
+        props: { post },
     }
 }
 
-const PostDetail = (props: Props) => {
-    console.log(props)
+const PostDetail = ({ post }: Props) => {
+    console.log(post)
 
-    return <div>PostDetail</div>
+    return <div>{<CommentInput profileImg={'/default.png'} userName={post.userName} />}</div>
 }
 
 export default PostDetail

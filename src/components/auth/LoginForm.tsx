@@ -21,10 +21,12 @@ function LoginForm({ mutate: login }: LoginFormProps) {
     }
 
     return (
-        <div>
-            <TextField label="email" name="email" value={loginData.email} onChange={onChange} />
-            <TextField type="password" label="password" name="password" value={loginData.password} onChange={onChange} />
-            <CustomButton onClick={onLoginBtnClick}>로그인</CustomButton>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <TextField style={{ width: '78vw' }} label="email" name="email" value={loginData.email} onChange={onChange} />
+            <TextField style={{ width: '78vw' }} type="password" label="password" name="password" value={loginData.password} onChange={onChange} />
+            <CustomButton size={'large'} onClick={onLoginBtnClick}>
+                먹이주기
+            </CustomButton>
         </div>
     )
 }

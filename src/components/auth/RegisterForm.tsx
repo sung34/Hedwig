@@ -46,6 +46,7 @@ function RegisterForm({ mutate: register }: RegisterFormProps) {
 
     return (
         <form
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}
             onSubmit={handleSubmit(onSubmitForm, () => {
                 console.log('양식 에러 발생')
             })}
@@ -60,7 +61,7 @@ function RegisterForm({ mutate: register }: RegisterFormProps) {
                         message: '올바르지 않은 이메일 형식입니다.',
                     },
                 }}
-                render={({ field }) => <TextField {...field} label="email" error={!!errors.email} helperText={errors.email?.message} />}
+                render={({ field }) => <TextField style={{ width: '78vw' }} {...field} label="email" error={!!errors.email} helperText={errors.email?.message} />}
             />
             <Controller
                 control={control}
@@ -72,7 +73,7 @@ function RegisterForm({ mutate: register }: RegisterFormProps) {
                         message: '3~10자의 영문 소문자와 숫자의 조합이어야 합니다.',
                     },
                 }}
-                render={({ field }) => <TextField {...field} label="username" error={!!errors.userName} helperText={errors.userName?.message} />}
+                render={({ field }) => <TextField style={{ width: '78vw' }} {...field} label="username" error={!!errors.userName} helperText={errors.userName?.message} />}
             />
             <Controller
                 control={control}
@@ -84,7 +85,9 @@ function RegisterForm({ mutate: register }: RegisterFormProps) {
                         message: '8 ~ 16자 영문, 숫자를 조합하세요',
                     },
                 }}
-                render={({ field }) => <TextField type="password" {...field} inputRef={passwordRef} label="password" error={!!errors.password} helperText={errors.password?.message} />}
+                render={({ field }) => (
+                    <TextField style={{ width: '78vw' }} type="password" {...field} inputRef={passwordRef} label="password" error={!!errors.password} helperText={errors.password?.message} />
+                )}
             />
             <Controller
                 control={control}
@@ -93,9 +96,13 @@ function RegisterForm({ mutate: register }: RegisterFormProps) {
                     required: '필수 입력 항목입니다.',
                     validate: (value) => passwordRef.current === value || '비밀번호가 일치하지 않습니다.',
                 }}
-                render={({ field }) => <TextField type="password" {...field} label="password check" error={!!errors.password_check} helperText={errors.password_check?.message} />}
+                render={({ field }) => (
+                    <TextField style={{ width: '78vw' }} type="password" {...field} label="password check" error={!!errors.password_check} helperText={errors.password_check?.message} />
+                )}
             />
-            <CustomButton type="submit">가입하기</CustomButton>
+            <CustomButton type="submit" size={'large'}>
+                분양하기
+            </CustomButton>
         </form>
     )
 }

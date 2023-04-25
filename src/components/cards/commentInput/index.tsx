@@ -14,10 +14,12 @@ interface CommentInputProps {
     onCommentSubmit: () => void
 }
 
+
 function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputProps) {
     const [showCommentInfo, setshowCommentInfo] = useState(false) // TextField와 LetterCounter의 보이기/숨기기 상태를 관리합니다.
     const [letterCount, setLetterCount] = useState(0)
     const [label, setLabel] = useState('')
+
     const [commentContent, setCommentContent] = useState('Write a comment...')
     // [NextRouter Hook]
     const router = useRouter()
@@ -79,6 +81,7 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
     }
 
     return (
+
         <CustomCard profileImg={profileImg} userName={userName} timeStamp="" moreBtn={false}>
             <StyledCardInput fullWidth multiline {...textFieldProps} />
 
@@ -89,6 +92,7 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
                         <Typography color={letterCount > 150 ? 'red' : 'primary'} variant="caption">
                             {letterCount}
                         </Typography>
+
                     </Box>
                     <Button onClick={handleCommentSubmit} disabled={letterCount === 0 || letterCount > 150}>
                         {isLoading ? <></> : 'Hoot'}
