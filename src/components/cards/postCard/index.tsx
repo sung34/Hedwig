@@ -8,6 +8,7 @@ import { timeSince } from '../timeSince'
 import CustomCard from '../customCard'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 /**
  * @example 
@@ -85,12 +86,14 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
 
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <>
-            <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
-                {bodyContent()}
-                {footerContent()}
-            </CustomCard>
-        </>
+        <Link href={`/post/${postId}`} style={{ textDecoration: 'none' }}>
+            <Box>
+                <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
+                    {bodyContent()}
+                    {footerContent()}
+                </CustomCard>
+            </Box>
+        </Link>
     )
 }
 

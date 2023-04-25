@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     CardContent,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -25,13 +26,14 @@ import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { CSSProperties, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
 import { GetStaticProps } from 'next'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
-
+import PostCard from '@/components/cards/postCard'
+import { getPosts } from '@/apis/Post'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -53,25 +55,26 @@ const navStyles = {
     mx: 2,
 }
 
-
 type Props = {
     posts: Post[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-    const response = await axiosInstance.get('/post')
-    const posts = response.data
+    const posts = await getPosts()
     return { props: { posts } }
 }
+
 const Post = ({ posts }: Props) => {
-    const myPosts = posts.filter((post: Post) => post.id === 2) //  API...
+    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
 
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
+    const [loadingVisible, setLoadingVisible] = useState(false)
+    const cardContainerRef = useRef<HTMLDivElement>(null)
+
     const router = useRouter()
-    console.dir(myPosts)
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
@@ -90,6 +93,14 @@ const Post = ({ posts }: Props) => {
     const logout = (): void => {
         //TODO 페이지만 이동할게 아니라 api 호출을 통해서 로그아웃 로직을 요청해야한다!
         router.push('/')
+    }
+
+    const handleTouchStart = () => {
+        setLoadingVisible(true)
+    }
+
+    const handleTouchEnd = () => {
+        setLoadingVisible(false)
     }
 
     const list = () => (
@@ -128,57 +139,47 @@ const Post = ({ posts }: Props) => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-
-            {value === 'my' ? (
-                <div style={{ flexGrow: 1 }}>
-                    {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
-                    {myPosts.map((post: Post) => (
-                        <Card key={post.id} sx={{ minWidth: 275 }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-                          
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {post.content}
-                                </Typography>
-                                <Typography variant="body2">
-                                    well meaning and kindly.
-                                    <br />
-                                    {'"a benevolent smile"'}
-                                </Typography>
-                                <CustomButton onClick={() => console.log(post.id)}>너 아이디 뭐야</CustomButton>
-                            </CardContent>
-                        </Card>
-                    ))}
+            <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+                <div style={{ textAlign: 'center' }}>
+                    <CircularProgress />
                 </div>
-            ) : (
-                <div style={{ flexGrow: 1 }}>
+                <div
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#fff',
+                        transition: 'background-color 0.3s ease',
+                        paddingBottom: '75px',
+                    }}
+                >
                     {/* 해당 컴포넌트는 게시글 컴포넌트로 대체될 예정!!!! */}
-                    {posts.map((post: Post) => (
-                        <Card key={post.id} sx={{ minWidth: 275 }}>
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-                        
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {post.content}
-                                </Typography>
-                                <Typography variant="body2">
-                                    well meaning and kindly.
-                                    <br />
-                                    {'"a benevolent smile"'}
-                                </Typography>
-                                <CustomButton onClick={() => console.log(post.id)}>너 아이디 뭐야</CustomButton>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    {posts.map((post: Post) => {
+                        const postData = {
+                            postId: 1,
+                            userName: '사용자 1',
+                            profileImg: '/default.png',
+                            content:
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.lskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfjlskjdflksjdlfkjsdlkfj',
+                            img: '/default.png',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            likeCount: 12,
+                            commentCount: 14,
+                            isLiked: true,
+                            isDetailPost: false,
+                            moreBtn: true,
+                            commentOnly: false,
+                        }
+                        return <PostCard key={post.id} {...postData} />
+                    })}
                 </div>
-            )}
+            </div>
 
-
-            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ paddingBottom: '10px', position: 'fixed', bottom: '0' }}>
+            <BottomNavigation value={btValue} onChange={handleBtNavChange} sx={{ position: 'fixed', bottom: '0' }}>
                 <BottomNavigationAction label="new" value="new" icon={<CreateIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/new" />
                 <BottomNavigationAction label="home" value="home" icon={<HomeIcon sx={{ fontSize: '30px' }} />} sx={navStyles} href="post/" />
                 <BottomNavigationAction label="profile" value="profile" icon={<AccountCircleIcon sx={{ fontSize: '30px' }} />} sx={navStyles} onClick={toggleDrawer(true)} />

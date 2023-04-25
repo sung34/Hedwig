@@ -43,7 +43,8 @@ export const StyledCardContent = styled(CardContent)<CardProps>(({ theme }) => (
     padding: '0',
     margin: 'auto',
     lineHeight: '1.5em',
-    overflowWrap: 'break-word',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     cursor: 'pointer',
 }))
 
