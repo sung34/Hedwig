@@ -14,7 +14,6 @@ export interface Post extends PostRequest {
     comments: Comment[]
     createdAt: Date
     updatedAt: Date
-    userName: string
     likesCount: number
     commentsCount: number
 }
