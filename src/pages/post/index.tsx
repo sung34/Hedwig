@@ -62,20 +62,18 @@ type Props = {
     posts: Post[]
 }
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-    const posts = await getPosts()
-    return {
-        props: {
-            posts,
-        },
-    }
-}
+// export const getStaticProps: GetStaticProps<Props> = async () => {
+//     const posts = await getPosts()
+//     return {
+//         props: {
+//             posts,
+//         },
+//     }
+// }
 
-const Post = ({ posts }: Props) => {
-    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
-    const { data: allPost } = useQuery('posts', getPosts, {
-        initialData: posts,
-    })
+const Post = () => {
+    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
+    const { data: allPost } = useQuery('posts', getPosts, { staleTime: 10000 })
 
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
