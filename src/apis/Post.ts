@@ -11,11 +11,16 @@ export const createPost = async (createPostData: PostRequest) => {
 }
 
 export const getPost = async (id: number) => {
-    const response = await axiosInstance.get(`/posts/${id}`)
+    const response = await axiosInstance.get(`/post/${id}`)
     return response.data
 }
 
 export const getPosts = async () => {
     const response = await axiosInstance.get('/post')
+    return response.data
+}
+
+export const likePost = async (postId: number) => {
+    const response = await axiosInstance.post(`/like/${postId}`)
     return response.data
 }

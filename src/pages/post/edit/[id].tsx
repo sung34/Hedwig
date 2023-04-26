@@ -31,11 +31,11 @@ type Props = {
 //     }
 // }
 
-const PostDetail = () => {
+const editDetail = () => {
     const router = useRouter()
     const id = router.query.id
 
     return <div>{/*<CommentInput profileImg={'/default.png'} userName={post.userName} />*/}</div>
 }
 
-export default PostDetail
+export default editDetail
