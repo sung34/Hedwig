@@ -1,5 +1,3 @@
-import { User } from './User';
-
 export interface CommentRequest {
   content: string
   postId: number
@@ -7,7 +5,7 @@ export interface CommentRequest {
 
 export interface Comment extends CommentRequest {
   commentId: number
-  author: User
+  userName: string
   createdAt: Date
   updatedAt: Date
 }

@@ -1,17 +1,27 @@
+
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import { styled } from '@mui/material/styles';
+import { CardProps } from '@mui/material/Card/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+
 /**
- * PostCard 스타일
+ * CustomCard 스타일
  */
-export const cardStyle = {
+export const StyledCard = styled(Card)<CardProps>(({ theme }) => ({
     width: '380px',
     padding: '12px 0',
     border: '1px solid #5c940d',
     transition: 'all 0.3s ease-in-out',
-}
+}))
 
 /**
- * PostCard 의 CardHeader 컴포넌트 스타일
+ * CustomCard Header 스타일
  */
-export const cardHeaderStyle = {
+export const StyledCardHeader = styled(CardHeader)<CardProps>(({ theme }) => ({
     padding: '0',
     '& .MuiCardHeader-content': {
         display: 'flex',
@@ -29,37 +39,40 @@ export const cardHeaderStyle = {
             color: '#71767b',
         },
     },
-}
+}))
 
 /**
- * PostCard 의 CardContent 컴포넌트 스타일
+ *  PostCard Content 스타일
  */
-export const cardContentStyle = {
+export const StyledCardContent = styled(CardContent)<CardProps>(({ theme }) => ({
     width: 'inherit',
+    fontFamily: theme.typography.fontFamily,
     padding: '0',
     margin: 'auto',
     lineHeight: '1.5em',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     cursor: 'pointer',
-}
+}))
 
 /**
- * PostCard 의 CardMedia 컴포넌트 스타일
+ * PostCard CardMedia 스타일
  */
-export const cardMediaStyle = {
-    maxWidth: 'inherit',
-    objectFit: 'cover',
+export const StyledCardMedia = styled(CardMedia)<CardProps>(({ theme }) => ({
+    width: '100%',
+    aspectRatio: '4/3',
+    objectFit: 'contain',
     margin: '0.6em 0',
     cursor: 'pointer',
-}
+}))
 
 /**
- * PostCard 의 IconButton 컴포넌트 스타일
+ * PostCard Footer(하단부) 스타일
  */
-export const cardIconButtonStyle = {
+export const StyledPostFooter = styled(Box)<CardProps>(({ theme }) => ({
     display: 'flex',
     margin: '0.6em 0',
+    alignItems: 'center',
     justifyContent: 'start',
     color: 'grey',
     button: {
@@ -68,9 +81,15 @@ export const cardIconButtonStyle = {
         justifyContent: 'start',
         gap: '0',
     },
-}
+}))
 
-export const inputStyle = {
+/**
+ * CommentCard TextField 컴포넌트 스타일
+ */
+export const StyledCardInput = styled(TextField)<CardProps>(({ theme }) => ({
+    margin: '0',
+    variant: 'outlined',
+    marginTop: '10px',
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
             borderColor: 'transparent',
@@ -82,4 +101,4 @@ export const inputStyle = {
             borderColor: 'transparent',
         },
     },
-}
+}))

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useQuery } from 'react-query'
+import  { useState, useEffect } from 'react'
+
 import { verify } from '../apis/Auth'
 import { getCookie } from '../utils/cookies'
 import { useRouter } from 'next/router'

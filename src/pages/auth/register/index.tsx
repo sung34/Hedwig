@@ -1,8 +1,9 @@
 // 회원가입 페이지는 Auth Page를 통해서만 진입할 수 있게 설계
 // 로그인 페이지 링크는 페이지에서 제외하고, 대신 이전 페이지로 라우팅해주는 뒤로가기 버튼 배치.
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 
-import { Box, IconButton } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
 import RegisterForm from '@/components/auth/RegisterForm'
 import { register } from '@/apis/Auth'
 import { useMutation } from 'react-query'
