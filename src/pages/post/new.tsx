@@ -1,6 +1,12 @@
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import PhotoOutlined from '@mui/icons-material/PhotoOutlined';
+import VideoFileOutlined from '@mui/icons-material/VideoFileOutlined';
+import Gif from '@mui/icons-material/Gif';
+
 import React, { useState } from 'react'
-import { Box, IconButton, TextField } from '@mui/material'
-import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
 import withAuth from '@/routes/ProtectedRoute'
