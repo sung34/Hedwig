@@ -45,7 +45,6 @@ export interface PostCardData extends CardData {
     likeCount: number
     commentCount: number
     isLiked: boolean
-    isDetailPost: boolean
 }
 
 /**
@@ -65,8 +64,8 @@ export interface CommentCardData extends CardData {
  * @property {string} profileImg - CustomCard에 들어가는 사용자 아바타 이미지 URL입니다.
  * @property {string} userName - 사용자의 이름 입니다.
  * @property {string} timeStamp - 현재 날짜로부터 언제 작성/수정 했는지 보여주는 문자열입니다
- * @property {React.ReactNode} children - CustomCard 본문과 하단에 들어갈 컴포넌트 입니다. 
- * 
+ * @property {React.ReactNode} children - CustomCard 본문과 하단에 들어갈 컴포넌트 입니다.
+ *
  * @date 2023.04.23
  * @author 임성열
  */

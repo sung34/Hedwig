@@ -11,9 +11,8 @@ const queryClient = new QueryClient({
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>
-            <CheckAuth>
-                <Component {...pageProps} />
-            </CheckAuth>
+            {/* <CheckAuth></CheckAuth> */}
+            <Component {...pageProps} />
         </QueryClientProvider>
     )
 }
