@@ -14,10 +14,11 @@ interface CommentInputProps {
     onCommentSubmit: () => void
 }
 
-function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputProps) {
+function CommentInput({ profileImg, userName }: CommentInputProps) {
     const [showCommentInfo, setshowCommentInfo] = useState(false) // TextField와 LetterCounter의 보이기/숨기기 상태를 관리합니다.
     const [letterCount, setLetterCount] = useState(0)
     const [label, setLabel] = useState('')
+
     const [commentContent, setCommentContent] = useState('Write a comment...')
     // [NextRouter Hook]
     const router = useRouter()
@@ -25,9 +26,9 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
     const { mutate, isLoading } = useMutation(
         (variables: { content: string; postId: string }) => createComment(variables.content, variables.postId), 
         {
-        onSuccess: () => {
-            onCommentSubmit()
-        },
+        // onSuccess: () => {
+        //     onCommentSubmit()
+        // },
         onError: (error) => {
             alert(error)
         },
@@ -77,6 +78,8 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
         value: letterCount > 150 ? 100 : (letterCount / 150) * 100,
         size: 32,
     }
+    /** 커멘트를 추가하는메소드! */
+    // 댓글을 추가한다! 필요한 요소 : 유저 id , postID , 콘텐츠
 
     return (
         <CustomCard profileImg={profileImg} userName={userName} timeStamp="" moreBtn={false}>

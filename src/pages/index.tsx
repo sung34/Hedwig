@@ -5,21 +5,6 @@ import PostCard from '@/components/cards/postCard'
 import theme from '@/styles/styles'
 import { Button, ThemeProvider } from '@mui/material'
 import Head from 'next/head'
-import { Router, useRouter } from 'next/router'
-const postData = {
-    postId: 1,
-    userName: '사용자 1',
-    profileImg: '/default.png',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    img: '/meme.jpg',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    likeCount: 12,
-    commentCount: 14,
-    isLiked: true,
-    isDetailPost: true,
-    moreBtn: true,
-}
 
 const commentData = {
     commentId: 4,
@@ -42,9 +27,6 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <PostCard {...postData} />
-                <CommentInput onCommentSubmit={() => ({})} profileImg={'/default.png'} userName="사용자1" />
-                <CommentCard {...commentData} />
             </main>
         </ThemeProvider>
     )

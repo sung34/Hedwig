@@ -8,12 +8,14 @@ export interface PostRequest {
 
 export interface Post extends PostRequest {
     id: number
-    userName: string
+    content: string
     likes: User[]
     isLiked: boolean
     comments: Comment[]
     createdAt: Date
     updatedAt: Date
-    likesCount: number
-    commentsCount: number
+    userName: string
+    likeCount: number
+    commentCount: number
+    moreBtn: boolean
 }
