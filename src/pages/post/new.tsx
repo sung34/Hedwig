@@ -3,6 +3,7 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { ArrowBack, PhotoOutlined, VideoFileOutlined, Gif } from '@mui/icons-material'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
+import withAuth from '@/routes/ProtectedRoute'
 interface PostInput {
     body: string
     img: File | null
@@ -103,4 +104,4 @@ function CreatePost() {
         </div>
     )
 }
-export default CreatePost
+export default withAuth(CreatePost)

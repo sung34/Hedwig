@@ -1,6 +1,7 @@
 import CommentCard from '@/components/cards/commentCard'
 import CommentInput from '@/components/cards/commentInput'
 import PostCard from '@/components/cards/postCard'
+import withAuth from '@/routes/ProtectedRoute'
 import Head from 'next/head'
 
 const commentData = {
@@ -12,7 +13,7 @@ const commentData = {
     updatedAt: new Date(),
     moreBtn: true,
 }
-export default function Home() {
+function Home() {
     return (
         <>
             <Head>
@@ -28,3 +29,5 @@ export default function Home() {
         </>
     )
 }
+
+export default withAuth(Home)

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import CommentInput from '@/components/cards/commentInput'
 import PostCard from '@/components/cards/postCard'
+import withAuth from '@/routes/ProtectedRoute'
 
 type Props = {
     post: Post
@@ -38,4 +39,4 @@ const editDetail = () => {
     return <div>{/*<CommentInput profileImg={'/default.png'} userName={post.userName} />*/}</div>
 }
 
-export default editDetail
+export default withAuth(editDetail)

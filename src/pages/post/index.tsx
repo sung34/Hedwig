@@ -37,6 +37,7 @@ import { getPost, getPosts } from '@/apis/Post'
 import { verify } from '@/apis/Auth'
 import { AuthResponse, userPayload } from '@/types/Auth'
 import { useQuery, useQueryClient } from 'react-query'
+import withAuth from '@/routes/ProtectedRoute'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -224,4 +225,4 @@ const Post = () => {
     )
 }
 
-export default Post
+export default withAuth(Post)
