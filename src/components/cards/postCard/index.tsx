@@ -12,13 +12,15 @@ import Favorite from '@mui/icons-material/Favorite';
 import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline';
 
 
-import { timeSince } from '../timeSince'
+
 import CustomCard from '../customCard'
 
 import { useState } from 'react'
+
 import { Post } from '@/types/Post';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getPost, likePost } from '@/apis/Post';
+import { timeSince } from '@/utils/timeSince';
 
 
 /**
@@ -67,11 +69,6 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
 
     const queryClient = useQueryClient()
 
-    const { mutate: likepost } = useMutation(likePost, {
-        onSuccess: (updatedPost) => {
-            queryClient.setQueryData(['post', updatedPost.id], updatedPost)
-        },
-    })
 
     const queryKey = ['post', id]
     const { data: postData } = useQuery(queryKey, () => getPost(id), {
@@ -123,7 +120,7 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
                         onClick={(e) => {
                             e.stopPropagation()
                             setLiked((prev) => !prev)
-                            likepost(id)
+                            likePost(id)
                         }}
                     >
                         {liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}

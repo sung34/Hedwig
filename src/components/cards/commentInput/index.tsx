@@ -29,7 +29,7 @@ function CommentInput({ profileImg, userName }: CommentInputProps) {
     const router = useRouter()
     // [useMutation Hook]
     const { mutate, isLoading } = useMutation(
-        (variables: { content: string; postId: string }) => createComment(variables.content, variables.postId), 
+        (variables: { content: string; postId: string }) => createComment(Number(variables.postId), variables.content), 
         {
         // onSuccess: () => {
         //     onCommentSubmit()

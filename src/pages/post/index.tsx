@@ -1,38 +1,35 @@
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 
 import CreateIcon from '@mui/icons-material/Create'
 import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, {  useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
 
 import PostCard from '@/components/cards/postCard'
-import {  getPosts } from '@/apis/Post'
+import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth';
-
-
+import { verify } from '@/apis/Auth'
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -43,7 +40,6 @@ const tabStyles = {
     },
     mx: 1.1,
 }
-
 
 // bottom 컴포넌트 스타일 객체
 const navStyles = {
@@ -69,6 +65,39 @@ const navStyles = {
 //     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
 
 const Post = () => {
+    // /**
+    //  * 게시글에 관련된 queryKeys
+    //  *
+    //  * @property allPosts - 모든 게시글 상태를 나타내는 쿼리 키
+    //  * @property post - postId에 해당하는 게시글의 상태를 나타내는 쿼리 키
+    //  * @property likedPosts - 현재 로그인한 사용자가 좋아요한 모든 게시글의 상태를 나타내는 쿼리 키
+    //  * @property postLike - postId에 해당하는 게시글의 좋아요 상태를 나타내는 쿼리 키
+    //  */
+    // const postKeys = {
+    //     /**
+    //      * allPosts: 모든 게시글 상태를 나타내는 쿼리 키
+    //      */
+    //     allPosts: ['posts'] as const,
+
+    //     /**
+    //      * post: postId에 해당하는 게시글의 상태를 나타내는 쿼리 키
+    //      * @param postId - 조회할 게시글의 ID
+    //      */
+    //     post: (postId: number) => [...postKeys.allPosts, { postId }] as const,
+
+    //     /**
+    //      * likedPosts: 현재 로그인한 사용자가 좋아요한 모든 게시글의 상태를 나타내는 쿼리 키
+    //      */
+    //     likedPosts: () => [...postKeys.allPosts, 'liked'] as const,
+
+    //     /**
+    //      * postLike: postId에 해당하는 게시글의 좋아요 상태를 나타내는 쿼리 키
+    //      * @param postId - 좋아요 상태를 조회할 게시글의 ID
+    //      */
+    //     postLike: (postId: number) => [...postKeys.allPosts, postId, 'like'] as const,
+    // }
+    // // const { data: likedPosts } = useQuery(postKeys.likedPosts(), getLikedPosts)
+
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
     const { data: allPost, isLoading } = useQuery('posts', getPosts)
 
@@ -111,7 +140,7 @@ const Post = () => {
     const handleTouchEnd = () => {
         setLoadingVisible(false)
     }
- 
+
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
@@ -190,7 +219,7 @@ const Post = () => {
                             const moreBtn = currentUser === post.userName
 
                             return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
-                    })}
+                        })}
                 </div>
             </div>
 

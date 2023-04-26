@@ -1,7 +1,8 @@
 import { CommentCardData } from '@/types/Card'
 import CustomCard from '../customCard'
-import { timeSince } from '../timeSince'
+
 import { StyledCardContent } from '../styles'
+import { timeSince } from '@/utils/timeSince'
 
 /**
  * @example 
