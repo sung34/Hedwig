@@ -20,7 +20,18 @@ export const getPosts = async () => {
     return response.data
 }
 
+
+export const updatePost = async (postId: number, content: string, img?: File) => {
+    const response = await axiosInstance.put(`/post/${postId}`, { content, img })
+    return alert(response.data)
+}
+
+export const deletePost = async (postId: number) => {
+    const response = await axiosInstance.delete(`/post/${postId}`)
+    return alert(response.data)
+}
+
 export const likePost = async (postId: number) => {
     const response = await axiosInstance.post(`/like/${postId}`)
-    return response.data
+    return alert(response.data)
 }
