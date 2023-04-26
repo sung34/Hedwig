@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from 'react'
-import { Box, CircularProgress, Typography, Button, FormControl } from '@mui/material'
+import { Box, CircularProgress, Typography, Button } from '@mui/material'
 import CustomCard from '../customCard'
 import { StyledCardInput } from '../styles'
-import { axiosInstance } from '@/apis/axios'
 import { useRouter } from 'next/router'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { createComment } from '@/apis/Comment'
-import { isStringObject } from 'util/types'
+
+
 // import CustomButton from '../CustomButton'
 interface CommentInputProps {
     profileImg: string
@@ -18,18 +18,19 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
     const [showCommentInfo, setshowCommentInfo] = useState(false) // TextField와 LetterCounter의 보이기/숨기기 상태를 관리합니다.
     const [letterCount, setLetterCount] = useState(0)
     const [label, setLabel] = useState('')
-    const [commentContent, setCommentContent] = useState('Write a comment...')
+    const [commentContent, setCommentContent] = useState('')
     // [NextRouter Hook]
     const router = useRouter()
     // [useMutation Hook]
     const { mutate, isLoading } = useMutation(
-        (variables: { content: string; postId: string }) => createComment(variables.content, variables.postId), 
+        (body: { content: string; postId: number }) => createComment(body), 
         {
         onSuccess: () => {
             onCommentSubmit()
         },
-        onError: (error) => {
-            alert(error)
+        onError: (error,variables) => {
+            console.log(error)
+            console.log(variables)
         },
     })
 
@@ -58,11 +59,14 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
         }
     }
     const handleCommentSubmit = () => {
-        mutate({ content: commentContent, postId: router.query.id as string })
+        mutate({ content: commentContent, postId: Number(router.query.id) })
+        setCommentContent('')
+        setLetterCount(0)
     }
 
     //Mui Component Props
     const textFieldProps = {
+        value: commentContent,
         onChange: handleChange,
         onFocus: handleFocus,
         onBlur: handleBlur,
@@ -83,7 +87,7 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
             <StyledCardInput fullWidth multiline {...textFieldProps} />
 
             {showCommentInfo && (
-                <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
+                <Box sx={{ height: showCommentInfo ? '35px': '0' }} className={'card-input_btns'} >
                     <CircularProgress {...circularProgressProps} />
                     <Box>
                         <Typography color={letterCount > 150 ? 'red' : 'primary'} variant="caption">
@@ -91,7 +95,7 @@ function CommentInput({ profileImg, userName, onCommentSubmit }: CommentInputPro
                         </Typography>
                     </Box>
                     <Button onClick={handleCommentSubmit} disabled={letterCount === 0 || letterCount > 150}>
-                        {isLoading ? <></> : 'Hoot'}
+                        {isLoading ? <CircularProgress  size={16}/> : 'Hoot'}
                     </Button>
                 </Box>
             )}

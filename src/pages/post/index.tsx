@@ -34,6 +34,8 @@ import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
+import CommentInput from '@/components/cards/commentInput'
+import { useQuery } from 'react-query'
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -43,6 +45,7 @@ const tabStyles = {
     },
     mx: 1.1,
 }
+
 
 // bottom 컴포넌트 스타일 객체
 const navStyles = {
@@ -118,6 +121,9 @@ const Post = ({ posts }: Props) => {
         </Box>
     )
 
+    const onCommentSubmit = () => {
+        alert('submitted!')
+    }
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
@@ -140,8 +146,10 @@ const Post = ({ posts }: Props) => {
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
             <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+                {/* 댓글 쓰기 기능 상세페이지 구현 전까지 테스트 용도로 만듬 */}
+                <CommentInput userName='testuser1' profileImg='/default.png' onCommentSubmit={onCommentSubmit} ></CommentInput>
                 <div style={{ textAlign: 'center' }}>
-                    <CircularProgress />
+                    {/* <CircularProgress /> */}
                 </div>
                 <div
                     onTouchStart={handleTouchStart}

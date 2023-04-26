@@ -1,6 +1,6 @@
 import { PostCardData } from '@/types/Card'
 
-import { Box, Divider, Typography, IconButton } from '@mui/material'
+import { Box, Divider, Typography, IconButton, CircularProgress, Dialog, DialogContent } from '@mui/material'
 import { StyledCardContent, StyledCardMedia, StyledPostFooter } from '../styles'
 import { FavoriteBorder, Favorite, ChatBubbleOutline } from '@mui/icons-material'
 
@@ -9,6 +9,9 @@ import CustomCard from '../customCard'
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useMutation, useQuery } from 'react-query'
+import { postLike } from '@/apis/Post'
+import { useRouter } from 'next/router'
 
 /**
  * @example 
@@ -37,20 +40,39 @@ import Link from 'next/link'
 function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId, img, likeCount, commentCount, isLiked, isDetailPost, moreBtn }: PostCardData) {
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
-
+    
     // 작성시간과 수정시간이 같다면 작성된 시간 기준으로 문자열 생성
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
     const timeStamp = createdAt === updatedAt ? timeSince(createdAt) + ' 작성됨' : timeSince(updatedAt) + ' 수정됨'
+    const [open, setOpen] = useState(false)
+
+    // 미디어 카드 토글
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
 
     // 게시글 본문에 들어갈 컴포넌트
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-                <StyledCardContent sx={{ height: isDetailPost ? 'auto':'100px' }}>{content}</StyledCardContent>
-
+                <StyledCardContent textOverflow={ isDetailPost ? 'initial' : 'ellipse'} >{content}</StyledCardContent>
                 <Box>
-                    {img && <StyledCardMedia image={img} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
-                    </Box>
+                    {img && !isDetailPost ? <StyledCardMedia height={'200px'} image={img} /> 
+                    : <StyledCardMedia height="100%" image={img} onClick={handleClickOpen} />}
+
+                    {img && open && (
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogContent>
+                                <img src={img} style={{ width: '100%' }} />
+                            </DialogContent>
+                        </Dialog>
+                    )}
+                </Box>
                 <Divider />
                 {isDetailPost && <Typography>{createdAt.toLocaleString()}</Typography>}
             </>
@@ -61,7 +83,7 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
     const footerContent = (): React.ReactNode => {
         return (
             <StyledPostFooter>
-                <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
+                {/* <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
                     <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${postId}\n Comment Button Clicked`)}>
                         <ChatBubbleOutline />
                     </IconButton>
@@ -72,14 +94,13 @@ function PostCard({ profileImg, userName, content, createdAt, updatedAt, postId,
                         sx={{ padding: '0', mr: '0.4em' }}
                         onClick={() => {
                             console.log(`Post ID: ${postId}\n Like Button Clicked`)
-                            setLiked((prev) => !prev)
                             console.log(`Request Like status change to server as ${liked}`)
                         }}
                     >
                         {liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
                     </IconButton>
                     <Typography>{likeCount}</Typography>
-                </Box>
+                </Box> */}
             </StyledPostFooter>
         )
     }

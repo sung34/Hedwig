@@ -19,3 +19,8 @@ export const getPosts = async () => {
     const response = await axiosInstance.get('/post')
     return response.data
 }
+
+export const postLike = async (postId: number) => {
+    const response = await axiosInstance.post('/like', postId)
+    return response.data
+}

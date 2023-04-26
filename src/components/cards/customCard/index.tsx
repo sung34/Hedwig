@@ -1,4 +1,6 @@
-import { Avatar, Grid, IconButton } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import Avatar from '@mui/material/Avatar'
+import IconButton from '@mui/material/IconButton'
 import { StyledCard, StyledCardHeader } from '../styles'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'

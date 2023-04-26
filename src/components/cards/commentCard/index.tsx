@@ -1,5 +1,4 @@
 import { CommentCardData } from '@/types/Card'
-import { CardContent } from '@mui/material'
 import CustomCard from '../customCard'
 import { timeSince } from '../timeSince'
 import { StyledCardContent } from '../styles'
