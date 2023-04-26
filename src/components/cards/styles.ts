@@ -1,7 +1,7 @@
-import theme from '@/styles/styles'
+
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import styled from '@mui/material/styles/styled';
+import { styled } from '@mui/material/styles';
 import { CardProps } from '@mui/material/Card/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';

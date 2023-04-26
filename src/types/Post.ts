@@ -15,7 +15,7 @@ export interface Post extends PostRequest {
     createdAt: Date
     updatedAt: Date
     userName: string
-    likeCount: number
-    commentCount: number
+    likesCount: number
+    commentsCount: number
     moreBtn: boolean
 }

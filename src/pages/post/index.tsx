@@ -1,35 +1,38 @@
-import BottomNavigation from '@mui/material/BottomNavigation'
-import BottomNavigationAction from '@mui/material/BottomNavigationAction'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import CircularProgress from '@mui/material/CircularProgress'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
-import Drawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+
 
 import CreateIcon from '@mui/icons-material/Create'
 import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useRef, useState } from 'react'
+import React, {  useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
 
 import PostCard from '@/components/cards/postCard'
-import { getPosts } from '@/apis/Post'
+import {  getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth'
+import { verify } from '@/apis/Auth';
+
+
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -40,6 +43,7 @@ const tabStyles = {
     },
     mx: 1.1,
 }
+
 
 // bottom 컴포넌트 스타일 객체
 const navStyles = {
@@ -107,7 +111,7 @@ const Post = () => {
     const handleTouchEnd = () => {
         setLoadingVisible(false)
     }
-
+ 
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
@@ -186,7 +190,7 @@ const Post = () => {
                             const moreBtn = currentUser === post.userName
 
                             return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
-                        })}
+                    })}
                 </div>
             </div>
 
