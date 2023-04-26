@@ -1,11 +1,9 @@
-
 import theme from '@/styles/styles'
 import { ThemeProvider } from '@mui/material'
-
 import Head from 'next/head'
+import withAuth from '@/routes/ProtectedRoute'
 
-export default function Home() {
-   
+function Home() {
     return (
         <ThemeProvider theme={theme}>
             <Head>
@@ -14,8 +12,9 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main>
-            </main>
+            <main></main>
         </ThemeProvider>
     )
 }
+
+export default withAuth(Home)
