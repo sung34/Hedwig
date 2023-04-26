@@ -73,7 +73,7 @@ type Props = {
 
 const Post = () => {
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
-    const { data: allPost } = useQuery('posts', getPosts, { staleTime: 10000 })
+    const { data: allPost, isLoading } = useQuery('posts', getPosts)
 
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
@@ -130,7 +130,9 @@ const Post = () => {
             </List>
         </Box>
     )
-
+    if (isLoading) {
+        return <div>로딩중...</div>
+    }
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
@@ -169,29 +171,30 @@ const Post = () => {
                         paddingBottom: '75px',
                     }}
                 >
-                    {allPost.map((post: Post) => {
-                        /** 동일한 유저가 좋아요 했다는것을 어떻게 파악할까  */
-                        // loginUser 가 post에 있는 userName과 같은가?
+                    {allPost &&
+                        allPost.map((post: Post) => {
+                            /** 동일한 유저가 좋아요 했다는것을 어떻게 파악할까  */
+                            // loginUser 가 post에 있는 userName과 같은가?
 
-                        // const postData = {
-                        //     postId: post.id,
-                        //     userName: post.userName,
-                        //     profileImg: '/default.png',
-                        //     content: post.content,
-                        //     img: post.img,
-                        //     createdAt: new Date(post.createdAt),
-                        //     updatedAt: new Date(post.updatedAt),
-                        //     likeCount: post.likesCount,
-                        //     commentCount: post.commentsCount,
-                        //     isLiked: post.isLiked,
-                        //     isDetailPost: false,
-                        //     moreBtn: currentUser === post.userName,
-                        //     commentOnly: false,
-                        // }
-                        const moreBtn = currentUser === post.userName
+                            // const postData = {
+                            //     postId: post.id,
+                            //     userName: post.userName,
+                            //     profileImg: '/default.png',
+                            //     content: post.content,
+                            //     img: post.img,
+                            //     createdAt: new Date(post.createdAt),
+                            //     updatedAt: new Date(post.updatedAt),
+                            //     likeCount: post.likesCount,
+                            //     commentCount: post.commentsCount,
+                            //     isLiked: post.isLiked,
+                            //     isDetailPost: false,
+                            //     moreBtn: currentUser === post.userName,
+                            //     commentOnly: false,
+                            // }
+                            const moreBtn = currentUser === post.userName
 
-                        return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
-                    })}
+                            return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
+                        })}
                 </div>
             </div>
 
