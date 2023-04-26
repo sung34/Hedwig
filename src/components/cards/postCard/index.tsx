@@ -50,9 +50,12 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount,
     const isImage = /\.(png|jpg|jpeg)$/i.test(img || ' ')
     const cardMediaComponent = isImage ? 'img' : 'video'
 
+    const propCreatedAt = new Date(createdAt)
+    const propUpdatedAt = new Date(updatedAt)
+
     // 작성시간과 수정시간이 같다면 작성된 시간 기준으로 문자열 생성
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
-    const timeStamp = createdAt === updatedAt ? timeSince(createdAt) + ' 작성됨' : timeSince(updatedAt) + ' 수정됨'
+    const timeStamp = propCreatedAt === propUpdatedAt ? timeSince(propCreatedAt) + ' 작성됨' : timeSince(propUpdatedAt) + ' 수정됨'
 
     const queryClient = useQueryClient()
 
@@ -78,7 +81,7 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount,
                 {/* img말고 동영상도 받을경우 media로 변경 */}
                 {img && <CardMedia component={cardMediaComponent} src={img} sx={cardMediaStyle} onClick={() => console.log(`Post ID: ${id}\n Media Content Clicked`)} />}
                 <Divider />
-                {isDetailPost && <Typography>{createdAt.toLocaleString()}</Typography>}
+                {isDetailPost && <Typography>{propCreatedAt.toLocaleString()}</Typography>}
             </>
         )
     }
@@ -109,7 +112,6 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount,
             <div onClick={() => (window.location.href = `/post/${id}`)}>
                 <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
                     {bodyContent()}
-                    {footerContent(id)}
                 </CustomCard>
             </div>
         </Box>
