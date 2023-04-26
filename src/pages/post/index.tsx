@@ -29,7 +29,10 @@ import { Post } from '@/types/Post'
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth'
+import { verify } from '@/apis/Auth';
+import withAuth from '@/routes/ProtectedRoute'
+
+
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -249,4 +252,4 @@ const Post = () => {
     )
 }
 
-export default Post
+export default withAuth(Post)

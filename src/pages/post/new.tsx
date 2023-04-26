@@ -9,6 +9,7 @@ import Gif from '@mui/icons-material/Gif';
 import React, { useState } from 'react'
 import CustomButton from '@/components/CustomButton'
 import { axiosInstance } from '@/apis/axios'
+import withAuth from '@/routes/ProtectedRoute'
 interface PostInput {
     body: string
     img: File | null
@@ -109,4 +110,4 @@ function CreatePost() {
         </div>
     )
 }
-export default CreatePost
+export default withAuth(CreatePost)

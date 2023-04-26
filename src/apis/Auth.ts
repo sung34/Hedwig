@@ -15,3 +15,8 @@ export const verify = async () => {
     const { data } = await axiosInstance.get<userPayload>('/verify')
     return data
 }
+
+export const refresh = async () => {
+    const { data } = await axiosInstance.get<AuthResponse>('/refresh')
+    return data
+}
