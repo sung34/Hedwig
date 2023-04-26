@@ -1,6 +1,11 @@
-import { PostCardData } from '@/types/Card'
 
-import { Box, Divider, Typography, IconButton } from '@mui/material'
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+
 import { StyledCardContent, StyledCardMedia, StyledPostFooter } from '../styles'
 import { FavoriteBorder, Favorite, ChatBubbleOutline } from '@mui/icons-material'
 
@@ -9,10 +14,8 @@ import CustomCard from '../customCard'
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Post } from '@/types/Post'
-import { getPost, getPosts, likePost } from '@/apis/Post'
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
-import { useRouter } from 'next/router'
+import { Post } from '@/types/Post';
+
 
 /**
  * @example 
@@ -38,72 +41,55 @@ import { useRouter } from 'next/router'
  * 
  * @author 임성열
  */
-function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount, isLiked, commentCount, moreBtn }: Post) {
+function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount, commentCount, isLiked,  moreBtn }: Post) {
     // 게시글 좋아요 표시 여부
-    const profileImg = '/default.png'
-    const router = useRouter()
-
-<<<<<<< HEAD
-=======
-    const isDetailPost = router.query.id !== undefined ? true : false
     const [liked, setLiked] = useState(isLiked)
-    // png, jpg, jpeg면 CardMedia의 component속성을 img로 설정
-    // 현재는 img만 받는다는 전제로 진행중
-    const isImage = /\.(png|jpg|jpeg)$/i.test(img || ' ')
-    const cardMediaComponent = isImage ? 'img' : 'video'
-
-    const propCreatedAt = new Date(createdAt)
-    const propUpdatedAt = new Date(updatedAt)
-
->>>>>>> 9dda6941bce13830da8d10d346ce834022e194a6
+    
     // 작성시간과 수정시간이 같다면 작성된 시간 기준으로 문자열 생성
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
-    const timeStamp = propCreatedAt === propUpdatedAt ? timeSince(propCreatedAt) + ' 작성됨' : timeSince(propUpdatedAt) + ' 수정됨'
+    const timeStamp = createdAt === updatedAt ? timeSince(createdAt) + ' 작성됨' : timeSince(updatedAt) + ' 수정됨'
+    const [open, setOpen] = useState(false)
 
-    const queryClient = useQueryClient()
+    // 미디어 카드 토글
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
 
-    const { mutate: likepost } = useMutation(likePost, {
-        onSuccess: (updatedPost) => {
-            queryClient.setQueryData(['post', updatedPost.id], updatedPost)
-        },
-    })
+    const handleClose = () => {
+        setOpen(false)
+    }
 
-    const queryKey = ['post', id]
-    const { data: postData } = useQuery(queryKey, () => getPost(id), {
-        initialData: () => {
-            const postsData = queryClient.getQueryData<Post[]>('posts')
-            return postsData ? postsData.find((p) => p.id === id) : undefined
-        },
-    })
-
+    const isDetailPost = false
+    const profileImg = '/default.png'
     // 게시글 본문에 들어갈 컴포넌트
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-<<<<<<< HEAD
-                <StyledCardContent sx={{ height: isDetailPost ? 'auto':'100px' }}>{content}</StyledCardContent>
-
+                <StyledCardContent >{content}</StyledCardContent>
                 <Box>
-                    {img && <StyledCardMedia image={img} onClick={() => console.log(`Post ID: ${postId}\n Media Content Clicked`)} />}
-                    </Box>
-=======
-                <CardContent sx={{ ...cardContentStyle, height: `${isDetailPost ? 'auto' : '100px'}` }}>{content}</CardContent>
-                {/* img말고 동영상도 받을경우 media로 변경 */}
-                {img && <CardMedia component={cardMediaComponent} src={img} sx={cardMediaStyle} onClick={() => console.log(`Post ID: ${id}\n Media Content Clicked`)} />}
->>>>>>> 9dda6941bce13830da8d10d346ce834022e194a6
+                    {img && !isDetailPost ? <StyledCardMedia image={img} /> 
+                    : <StyledCardMedia  image={img} onClick={handleClickOpen} />}
+
+                    {img && open && (
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogContent>
+                                <img src={img} style={{ width: '100%' }} />
+                            </DialogContent>
+                        </Dialog>
+                    )}
+                </Box>
                 <Divider />
-                {isDetailPost && <Typography>{propCreatedAt.toLocaleString()}</Typography>}
+                {isDetailPost && <Typography>{createdAt.toLocaleString()}</Typography>}
             </>
         )
     }
 
     // 게시글 하단에 들어갈 컴포넌트
-    const footerContent = (id: Post['id']): React.ReactNode => {
+    const footerContent = (): React.ReactNode => {
         return (
-<<<<<<< HEAD
             <StyledPostFooter>
                 <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
-                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${postId}\n Comment Button Clicked`)}>
+                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${id}\n Comment Button Clicked`)}>
                         <ChatBubbleOutline />
                     </IconButton>
                     <Typography>{commentCount}</Typography>
@@ -112,8 +98,7 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount,
                     <IconButton
                         sx={{ padding: '0', mr: '0.4em' }}
                         onClick={() => {
-                            console.log(`Post ID: ${postId}\n Like Button Clicked`)
-                            setLiked((prev) => !prev)
+                            console.log(`Post ID: ${id}\n Like Button Clicked`)
                             console.log(`Request Like status change to server as ${liked}`)
                         }}
                     >
@@ -122,34 +107,19 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likeCount,
                     <Typography>{likeCount}</Typography>
                 </Box>
             </StyledPostFooter>
-=======
-            <Box sx={cardIconButtonStyle}>
-                <Button startIcon={<ChatBubbleOutline />} endIcon={commentCount} onClick={() => console.log(`Post ID: ${id}\n Comment Button Clicked`)} />
-
-                <Button
-                    className="favBtn"
-                    startIcon={liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
-                    endIcon={likeCount}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        setLiked((prev) => !prev)
-                        likepost(id)
-                    }}
-                />
-            </Box>
->>>>>>> 9dda6941bce13830da8d10d346ce834022e194a6
         )
     }
 
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <Box>
-            <div onClick={() => (window.location.href = `/post/${id}`)}>
+        <Link href={`/post/${id}`} style={{ textDecoration: 'none' }}>
+            <Box>
                 <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
                     {bodyContent()}
+                    {footerContent()}
                 </CustomCard>
-            </div>
-        </Box>
+            </Box>
+        </Link>
     )
 }
 

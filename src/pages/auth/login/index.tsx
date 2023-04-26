@@ -7,8 +7,10 @@ import { setCookie } from '@/utils/cookies'
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-query'
-import { Box, IconButton } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+
 
 function LoginPage() {
     const router = useRouter()

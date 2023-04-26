@@ -1,42 +1,36 @@
-import {
-    BottomNavigation,
-    BottomNavigationAction,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+
 import CreateIcon from '@mui/icons-material/Create'
 import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { CSSProperties, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
-import { GetServerSideProps, GetStaticProps } from 'next'
-import CustomButton from '@/components/CustomButton'
-import { axiosInstance } from '@/apis/axios'
+
 import PostCard from '@/components/cards/postCard'
-import { getPost, getPosts } from '@/apis/Post'
+import { getPosts } from '@/apis/Post'
+import { useQuery } from 'react-query'
 import { verify } from '@/apis/Auth'
-import { AuthResponse, userPayload } from '@/types/Auth'
-import { useQuery, useQueryClient } from 'react-query'
+
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
     fontSize: '17px',
@@ -58,18 +52,17 @@ const navStyles = {
     mx: 2,
 }
 
-type Props = {
-    posts: Post[]
-}
+// type Props = {
+//     posts: Post[]
+// }
 
 // export const getStaticProps: GetStaticProps<Props> = async () => {
 //     const posts = await getPosts()
-//     return {
-//         props: {
-//             posts,
-//         },
-//     }
+//     return { props: { posts } }
 // }
+
+// const Post = ({ posts }: Props) => {
+//     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
 
 const Post = () => {
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
@@ -83,8 +76,9 @@ const Post = () => {
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
     const [loadingVisible, setLoadingVisible] = useState(false)
-    const [likesCount, setLikesCount] = useState(0)
+
     const cardContainerRef = useRef<HTMLDivElement>(null)
+
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
@@ -113,8 +107,6 @@ const Post = () => {
     const handleTouchEnd = () => {
         setLoadingVisible(false)
     }
-
-    const queryClient = useQueryClient()
 
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>

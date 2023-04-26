@@ -1,12 +1,17 @@
 import { ChangeEvent, useState } from 'react'
-import { Box, CircularProgress, Typography, Button, FormControl } from '@mui/material'
+
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
+
 import CustomCard from '../customCard'
 import { StyledCardInput } from '../styles'
-import { axiosInstance } from '@/apis/axios'
+
 import { useRouter } from 'next/router'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { createComment } from '@/apis/Comment'
-import { isStringObject } from 'util/types'
 // import CustomButton from '../CustomButton'
 interface CommentInputProps {
     profileImg: string

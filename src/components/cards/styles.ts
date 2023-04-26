@@ -1,5 +1,12 @@
 import theme from '@/styles/styles'
-import { Card, CardHeader, styled, CardProps, CardContent, CardMedia, TextField, Box } from '@mui/material'
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import styled from '@mui/material/styles/styled';
+import { CardProps } from '@mui/material/Card/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 /**
  * CustomCard 스타일
