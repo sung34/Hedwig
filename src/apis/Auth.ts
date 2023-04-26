@@ -17,6 +17,6 @@ export const verify = async () => {
 }
 
 export const refresh = async () => {
-    const { data } = await axiosInstance.get<AuthResponse>('/api/auth/refresh')
+    const { data } = await axiosInstance.get<AuthResponse>('/refresh')
     return data
 }

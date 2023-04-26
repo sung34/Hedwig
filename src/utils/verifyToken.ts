@@ -7,8 +7,9 @@ type AuthType = 'PENDING' | 'SUCCESS' | 'FAILED'
 
 function verifyToken() {
     const [isAuthenticated, setIsAuthenticated] = useState<AuthType>('PENDING')
-    const verifyResult = useQuery(['auth', 'verify'], verify, {
-        enabled: !!getCookie('accessToken'), // 값이 없으면 undefined. 값을 boolean으로 변환
+    const token = getCookie('accessToken')
+    const verifyResult = useQuery(['auth', 'verify', token], verify, {
+        enabled: !!token, // 값이 없으면 undefined. 값을 boolean으로 변환
         // 유효하다면
         onSuccess: () => {
             setIsAuthenticated('SUCCESS')
@@ -22,7 +23,7 @@ function verifyToken() {
 
     // 엑세스 토큰이 없을 때
     const refreshResult = useQuery(['auth', 'refresh'], refresh, {
-        enabled: !getCookie('accessToken'), // 엑세스 토큰이 없을 때에만 refresh 요청 전송
+        enabled: !token, // 엑세스 토큰이 없을 때에만 refresh 요청 전송
         onSuccess: (data) => {
             setCookie('accessToken', data.accessToken, {
                 path: '/',
