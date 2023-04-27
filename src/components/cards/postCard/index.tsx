@@ -1,25 +1,22 @@
-
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
 
 import { StyledCardContent, StyledCardMedia, StyledPostFooter } from '../styles'
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
-import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline';
-
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
+import Favorite from '@mui/icons-material/Favorite'
+import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline'
 
 import { timeSince } from '../timeSince'
 import CustomCard from '../customCard'
 
 import { useState } from 'react'
-import { Post } from '@/types/Post';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getPost, likePost } from '@/apis/Post';
-
+import { Post } from '@/types/Post'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { getPost, likePost } from '@/apis/Post'
 
 /**
  * @example 
@@ -45,11 +42,11 @@ import { getPost, likePost } from '@/apis/Post';
  * 
  * @author 임성열
  */
-function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount, commentsCount, isLiked,  moreBtn }: Post) {
+function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount, commentsCount, isLiked, moreBtn }: Post) {
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
     const [open, setOpen] = useState(false)
-
+    const [curLikesCount, setCurLikesCount] = useState(likesCount)
     // 미디어 카드 토글
     const handleClickOpen = () => {
         setOpen(true)
@@ -67,36 +64,20 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
 
     const queryClient = useQueryClient()
 
-    const { mutate: likepost } = useMutation(likePost, {
-        onSuccess: (updatedPost) => {
-            queryClient.setQueryData(['post', updatedPost.id], updatedPost)
-        },
-    })
-
-    const queryKey = ['post', id]
-    const { data: postData } = useQuery(queryKey, () => getPost(id), {
-        initialData: () => {
-            const postsData = queryClient.getQueryData<Post[]>('posts')
-            return postsData ? postsData.find((p) => p.id === id) : undefined
-        },
-    })
-
-    
     const isDetailPost = false
     const profileImg = '/default.png'
     // 게시글 본문에 들어갈 컴포넌트
     const bodyContent = (): React.ReactNode => {
         return (
             <>
-                <StyledCardContent >{content}</StyledCardContent>
+                <StyledCardContent>{content}</StyledCardContent>
                 <Box>
-                    {img && !isDetailPost ? <StyledCardMedia image={img} /> 
-                    : <StyledCardMedia  image={img} onClick={handleClickOpen} />}
+                    {img && !isDetailPost ? <StyledCardMedia image={img.toString()} /> : <StyledCardMedia image={img?.toString()} onClick={handleClickOpen} />}
 
                     {img && open && (
                         <Dialog open={open} onClose={handleClose}>
                             <DialogContent>
-                                <img src={img} style={{ width: '100%' }} />
+                                <img src={img.toString()} style={{ width: '100%' }} />
                             </DialogContent>
                         </Dialog>
                     )}
@@ -123,12 +104,13 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
                         onClick={(e) => {
                             e.stopPropagation()
                             setLiked((prev) => !prev)
-                            likepost(id)
+                            likePost(id)
+                            setCurLikesCount(liked ? curLikesCount - 1 : curLikesCount + 1)
                         }}
                     >
                         {liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
                     </IconButton>
-                    <Typography>{likesCount}</Typography>
+                    <Typography>{curLikesCount}</Typography>
                 </Box>
             </StyledPostFooter>
         )
