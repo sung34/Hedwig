@@ -31,6 +31,7 @@ import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
 import { verify } from '@/apis/Auth'
 import withAuth from '@/routes/ProtectedRoute'
+import { queryKeys } from '@/constants/queryKey'
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -67,7 +68,7 @@ const navStyles = {
 
 const Post = () => {
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
-    const { data: allPost, isLoading } = useQuery('posts', getPosts)
+    const { data: allPost, isLoading } = useQuery(queryKeys.post.allPosts, getPosts)
 
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
