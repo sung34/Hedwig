@@ -28,7 +28,11 @@ const editDetail = () => {
 
     // 글쓰기에 추가한 내용 모두 저장 할 함수
     const mutate = async (formData: FormData) => {
-        await axiosInstance.put(`/post/${id}`, formData)
+        await axiosInstance.put(`/post/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
     }
 
     if (isLoading) {

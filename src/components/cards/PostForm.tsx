@@ -24,8 +24,9 @@ interface PostFormProps {
 function PostForm({ mutate, initialValue = { content: '', img: null } }: PostFormProps) {
     const mainColor = '#5c940d'
     const [postInput, setPostInput] = useState<PostInput>(initialValue)
-    const [previewUrl, setPreviewUrl] = useState('')
+    const [previewUrl, setPreviewUrl] = useState(initialValue.img?.toString())
     const router = useRouter()
+
     // 미디어 추가 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, files } = e.target
