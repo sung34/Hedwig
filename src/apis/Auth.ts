@@ -1,5 +1,6 @@
 import { SignInRequest, SignUpRequest, AuthResponse, userPayload } from '@/types/Auth'
 import { axiosInstance } from './axios'
+import { removeCookie } from '@/utils/cookies'
 
 export const register = async (signUpData: SignUpRequest) => {
     const { data } = await axiosInstance.post<AuthResponse>('/register', signUpData)
@@ -13,6 +14,7 @@ export const login = async (signInData: SignInRequest) => {
 
 export const logout = async () => {
     const { data } = await axiosInstance.post<AuthResponse>('/logout')
+    removeCookie('accessToken')
     return data
 }
 
