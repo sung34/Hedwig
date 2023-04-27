@@ -22,7 +22,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Post } from '@/types/Post'
 
@@ -55,32 +55,64 @@ const navStyles = {
     mx: 2,
 }
 
-// type Props = {
-//     posts: Post[]
-// }
-
-// export const getStaticProps: GetStaticProps<Props> = async () => {
-//     const posts = await getPosts()
-//     return { props: { posts } }
-// }
-
-// const Post = ({ posts }: Props) => {
-//     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
-
 const Post = () => {
-    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
-    const { data: allPost, isLoading } = useQuery(queryKeys.post.allPosts, getPosts)
+    // 무한 스크롤 관련 state
+    const [allData, setAllData] = useState<any[]>([])
+    const [pageNumber, setPageNumber] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const endOfListRef = useRef<HTMLDivElement>(null)
 
+    const { data: allPost, isLoading } = useQuery('posts', getPosts, {
+        onSuccess: (allPost) => {
+            setAllData(allPost)
+        },
+    })
+    const handleLoadMore = () => {
+        setPageNumber((prevPageNumber) => prevPageNumber + 1)
+    }
+    console.log('되냐?')
+    useEffect(() => {
+        if (!isLoading) {
+            // Intersection Observer 설정
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1.0,
+            }
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    handleLoadMore()
+                }
+            }, options)
+            if (endOfListRef.current) {
+                observer.observe(endOfListRef.current)
+            }
+
+            // 컴포넌트 언마운트 시 observer 해제
+            return () => {
+                observer.disconnect()
+            }
+        }
+    }, [isLoading])
+
+    // 데이터 조각내기
+    const getPageData = (allData: any[], pageNumber: number, pageSize: number): any[] => {
+        const startIndex = (pageNumber - 1) * pageSize
+        const endIndex = startIndex + pageSize
+        return allData?.slice(0, endIndex)
+    }
+    // 조각낸 데이터
+    const pageData = getPageData(allData, pageNumber, pageSize)
+
+    // 현재 로그인된 유저와 게시글 데이터의 유저 이름 비교를 위한 코드
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
 
+    //MUI 컴포넌트 states
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
-    const [loadingVisible, setLoadingVisible] = useState(false)
-
-    const cardContainerRef = useRef<HTMLDivElement>(null)
 
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -101,14 +133,6 @@ const Post = () => {
     const logout = (): void => {
         //TODO 페이지만 이동할게 아니라 api 호출을 통해서 로그아웃 로직을 요청해야한다!
         router.push('/')
-    }
-
-    const handleTouchStart = () => {
-        setLoadingVisible(true)
-    }
-
-    const handleTouchEnd = () => {
-        setLoadingVisible(false)
     }
 
     const list = () => (
@@ -149,13 +173,11 @@ const Post = () => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-            <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+            <div className="CardContainer" style={{ width: '100%' }}>
                 <div style={{ textAlign: 'center' }}>
                     <CircularProgress />
                 </div>
                 <div
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -166,30 +188,13 @@ const Post = () => {
                         paddingBottom: '75px',
                     }}
                 >
-                    {allPost &&
-                        allPost.map((post: Post) => {
-                            /** 동일한 유저가 좋아요 했다는것을 어떻게 파악할까  */
-                            // loginUser 가 post에 있는 userName과 같은가?
-
-                            // const postData = {
-                            //     postId: post.id,
-                            //     userName: post.userName,
-                            //     profileImg: '/default.png',
-                            //     content: post.content,
-                            //     img: post.img,
-                            //     createdAt: new Date(post.createdAt),
-                            //     updatedAt: new Date(post.updatedAt),
-                            //     likeCount: post.likesCount,
-                            //     commentCount: post.commentsCount,
-                            //     isLiked: post.isLiked,
-                            //     isDetailPost: false,
-                            //     moreBtn: currentUser === post.userName,
-                            //     commentOnly: false,
-                            // }
+                    {pageData &&
+                        pageData.map((post: Post) => {
                             const moreBtn = currentUser === post.userName
 
                             return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
                         })}
+                    <div ref={endOfListRef} />
                 </div>
             </div>
 
