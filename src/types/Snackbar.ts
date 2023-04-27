@@ -1,5 +1,6 @@
 interface SnackbarOption {
     open: boolean
+    AlertComponent: JSX.Element
 }
 
 export interface SnackbarContextProps {

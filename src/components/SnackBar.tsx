@@ -1,14 +1,14 @@
 import React, { useContext } from 'react'
 import { SnackbarContext } from '@/contexts/SnackbarContext'
-import { useTheme } from '@mui/material/styles'
-import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
-import CheckIcon from '@mui/icons-material/Check'
 import Slide from '@mui/material/Slide'
 import { SlideProps } from '@mui/material/Slide'
 
-function SnackBar() {
-    const theme = useTheme()
+interface SnackBarProps {
+    children?: JSX.Element
+}
+
+function SnackBar({ children }: SnackBarProps) {
     const { snackbarOptions, setSnackbarOptions } = useContext(SnackbarContext)
     const handleClose = () => {
         setSnackbarOptions({ ...snackbarOptions, open: false })
@@ -26,28 +26,18 @@ function SnackBar() {
                 horizontal: 'center',
             }}
             transitionDuration={{
-                enter: 2000,
-                exit: 2000,
+                enter: 1000,
+                exit: 1000,
             }}
-            autoHideDuration={3000}
+            autoHideDuration={2000}
             TransitionComponent={SlideTransition}
-            message="성공"
         >
-            <Alert
-                icon={<CheckIcon fontSize="inherit" color={'secondary'} />}
-                severity="success"
-                sx={{ width: '100%', backgroundColor: theme.palette.primary.main, color: theme.palette.secondary.main }}
-            >
-                성공
-            </Alert>
+            {children}
         </Snackbar>
     )
 }
 
 export default React.memo(SnackBar)
-
-// Click-Away Listener : 요소 외부에서 클릭 이벤트가 발생할 시 이를 감지
-// 추측) 스낵바는 기본적으로 clickaway 이벤트를 감지하여 close event를 발생시키는 듯.
 
 /**
  * Snackbar
@@ -61,4 +51,12 @@ export default React.memo(SnackBar)
  *
  * @prop action?: 표시할 동작. 스낵바 메세지 뒤 끝에 렌더링 됨.
  *
+ */
+
+/**
+ * Alert Component List
+ * <Alert severity="error">message</Alert>
+ * <Alert severity="warning">message</Alert>
+ * <Alert severity="info">message</Alert>
+ * <Alert severity="success">message</Alert>
  */

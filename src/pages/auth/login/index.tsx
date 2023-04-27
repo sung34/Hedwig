@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import { useTheme } from '@mui/material/styles'
 import Loader from '@/components/Loader'
+import Alert from '@mui/material/Alert'
 
 function LoginPage() {
     const router = useRouter()
@@ -24,7 +25,11 @@ function LoginPage() {
     const { mutate, isLoading } = useMutation(login, {
         onSuccess: (data) => {
             setCookie('accessToken', data.accessToken, { path: '/', maxAge: data.content.exp - data.content.iat })
-            setSnackbarOptions({ ...snackbarOptions, open: true })
+            setSnackbarOptions({
+                ...snackbarOptions,
+                open: true,
+                AlertComponent: <Alert severity={'success'}> 로그인 성공 !</Alert>,
+            })
             router.push('/post')
         },
         onError: (err: AxiosError) => {
