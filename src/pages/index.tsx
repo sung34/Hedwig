@@ -1,5 +1,3 @@
-
-
 import Head from 'next/head'
 import withAuth from '@/routes/ProtectedRoute'
 

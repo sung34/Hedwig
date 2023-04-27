@@ -22,7 +22,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 
 
@@ -31,13 +31,9 @@ import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
 import { verify } from '@/apis/Auth';
 import withAuth from '@/routes/ProtectedRoute'
+import { queryKeys } from '@/constants/queryKey'
+import Loader from '@/components/Loader'
 import { PostResponseData } from '@/types/Post'
-import { getComments } from '@/apis/Comment'
-import CommentCard from '@/components/cards/commentCard'
-import { Comment } from '@/types/Comment'
-import CommentInput from '@/components/cards/commentInput'
-
-
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -60,36 +56,64 @@ const navStyles = {
     mx: 2,
 }
 
-// type Props = {
-//     posts: Post[]
-// }
-
-// export const getStaticProps: GetStaticProps<Props> = async () => {
-//     const posts = await getPosts()
-//     return { props: { posts } }
-// }
-
-// const Post = ({ posts }: Props) => {
-//     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
-
 const Post = () => {
-    
-    // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
-    const { data: allPost, isLoading } = useQuery('posts', getPosts)
+    // 무한 스크롤 관련 state
+    const [allData, setAllData] = useState<any[]>([])
+    const [pageNumber, setPageNumber] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const endOfListRef = useRef<HTMLDivElement>(null)
 
+    const { data: allPost, isLoading } = useQuery('posts', getPosts, {
+        onSuccess: (allPost) => {
+            setAllData(allPost)
+        },
+    })
+    const handleLoadMore = () => {
+        setPageNumber((prevPageNumber) => prevPageNumber + 1)
+    }
+
+    useEffect(() => {
+        if (!isLoading) {
+            // Intersection Observer 설정
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1.0,
+            }
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    handleLoadMore()
+                }
+            }, options)
+            if (endOfListRef.current) {
+                observer.observe(endOfListRef.current)
+            }
+
+            // 컴포넌트 언마운트 시 observer 해제
+            return () => {
+                observer.disconnect()
+            }
+        }
+    }, [isLoading])
+
+    // 데이터 조각내기
+    const getPageData = (allData: any[], pageNumber: number, pageSize: number): any[] => {
+        const startIndex = (pageNumber - 1) * pageSize
+        const endIndex = startIndex + pageSize
+        return allData?.slice(0, endIndex)
+    }
+    // 조각낸 데이터
+    const pageData = getPageData(allData, pageNumber, pageSize)
+
+    // 현재 로그인된 유저와 게시글 데이터의 유저 이름 비교를 위한 코드
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
 
-
-    
-    
+    //MUI 컴포넌트 states
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
     const [dialogState, setDialogState] = useState(false)
-    const [loadingVisible, setLoadingVisible] = useState(false)
-
-    const cardContainerRef = useRef<HTMLDivElement>(null)
 
     const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -112,14 +136,6 @@ const Post = () => {
         router.push('/')
     }
 
-    const handleTouchStart = () => {
-        setLoadingVisible(true)
-    }
-
-    const handleTouchEnd = () => {
-        setLoadingVisible(false)
-    }
-
     const list = () => (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
@@ -135,7 +151,7 @@ const Post = () => {
         </Box>
     )
     if (isLoading) {
-        return <div>로딩중...</div>
+        return <Loader />
     }
 
     const dummy = {
@@ -178,13 +194,11 @@ const Post = () => {
                 <Tab value="liked" label="Liked" sx={tabStyles} />
                 <Tab value="my" label="My" sx={tabStyles} />
             </Tabs>
-            <div className="CardContainer" style={{ width: '100%' }} ref={cardContainerRef}>
+            <div className="CardContainer" style={{ width: '100%' }}>
                 <div style={{ textAlign: 'center' }}>
                     <CircularProgress />
                 </div>
                 <div
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -195,18 +209,13 @@ const Post = () => {
                         paddingBottom: '75px',
                     }}
                 >
-                    {/* {allPost &&
-                        allPost.map((postResData: PostResponseData) => {
-                            const moreBtn = currentUser === postResData.userName
+                    {pageData &&
+                        pageData.map((post: PostResponseData) => {
+                            const moreBtn = currentUser === post.userName
 
-                            return <PostCard key={postResData.id} {...postResData} moreBtn={moreBtn} />
-                        })} */}
-                        {/* { comments.map((comment: Comment)=> {
-                            return <CommentCard key={comment.commentId} {...comment} moreBtn={true} />
-                        })} */}
-                        <PostCard {...postDummy} isDetailPost={true} moreBtn={true} />
-                        <CommentInput profileImg='123' userName='user1'/>
-                        <CommentCard  {...dummy} moreBtn={true} />
+                            return <PostCard key={post.id} {...post} isDetailPost={false} postId={post.id} moreBtn={moreBtn} />
+                        })}
+                    <div ref={endOfListRef} />
                 </div>
             </div>
 
