@@ -12,6 +12,7 @@ import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { SnackbarContext } from '@/contexts/SnackbarContext'
 import { useContext } from 'react'
+import Loader from '@/components/Loader'
 
 function RegisterPage() {
     const router = useRouter()
@@ -30,7 +31,7 @@ function RegisterPage() {
         router.back()
     }
 
-    if (isLoading) return <>loading...</>
+    if (isLoading) return <Loader />
     return (
         <>
             <IconButton onClick={onArrowBackClick} href="/post" aria-label="back" sx={{ color: '#5c940d', position: 'absolute', top: '10px', left: '10px' }}>

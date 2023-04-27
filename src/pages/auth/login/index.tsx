@@ -13,6 +13,7 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import { useTheme } from '@mui/material/styles'
+import Loader from '@/components/Loader'
 
 function LoginPage() {
     const router = useRouter()
@@ -35,7 +36,7 @@ function LoginPage() {
         router.back()
     }
 
-    if (isLoading) return <>loading...</>
+    if (isLoading) return <Loader />
     return (
         <>
             <IconButton onClick={onArrowBackClick} href="/post" aria-label="back" sx={{ color: theme.palette.primary.main, position: 'absolute', top: '10px', left: '10px' }}>
