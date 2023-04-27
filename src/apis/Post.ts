@@ -1,7 +1,7 @@
 import { PostRequest, Post } from '@/types/Post'
 import { axiosInstance } from './axios'
 
-export const createPost = async (createPostData: PostRequest) => {
+export const createPost = async (createPostData: FormData) => {
     const { data } = await axiosInstance.post<Post>('/post', createPostData, {
         headers: {
             'Content-Type': 'multipart/form-data',

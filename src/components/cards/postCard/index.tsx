@@ -72,12 +72,12 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
             <>
                 <StyledCardContent>{content}</StyledCardContent>
                 <Box>
-                    {img && !isDetailPost ? <StyledCardMedia image={img} /> : <StyledCardMedia image={img} onClick={handleClickOpen} />}
+                    {img && !isDetailPost ? <StyledCardMedia image={img.toString()} /> : <StyledCardMedia image={img?.toString()} onClick={handleClickOpen} />}
 
                     {img && open && (
                         <Dialog open={open} onClose={handleClose}>
                             <DialogContent>
-                                <img src={img} style={{ width: '100%' }} />
+                                <img src={img.toString()} style={{ width: '100%' }} />
                             </DialogContent>
                         </Dialog>
                     )}

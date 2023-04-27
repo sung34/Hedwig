@@ -3,7 +3,7 @@ import { Comment } from './Comment'
 
 export interface PostRequest {
     content: string
-    img?: string
+    img?: FormData
 }
 
 export interface Post extends PostRequest {
