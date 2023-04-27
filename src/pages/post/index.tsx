@@ -24,15 +24,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Post } from '@/types/Post'
+
 
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth'
+import { verify } from '@/apis/Auth';
 import withAuth from '@/routes/ProtectedRoute'
 import { queryKeys } from '@/constants/queryKey'
 import Loader from '@/components/Loader'
+import { PostResponseData } from '@/types/Post'
 
 // tab 컴포넌트 스타일 객체
 const tabStyles = {
@@ -70,7 +71,7 @@ const Post = () => {
     const handleLoadMore = () => {
         setPageNumber((prevPageNumber) => prevPageNumber + 1)
     }
-    console.log('되냐?')
+
     useEffect(() => {
         if (!isLoading) {
             // Intersection Observer 설정
@@ -152,6 +153,26 @@ const Post = () => {
     if (isLoading) {
         return <Loader />
     }
+
+    const dummy = {
+        commentId: 2,
+        content: "2342",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userName: "user",
+
+    }
+    const postDummy = {
+        postId: 2,
+        content: "2342",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userName: "user",
+        likesCount: 5,
+        commentsCount: 44,
+         isLiked: true
+ 
+    }
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
@@ -189,10 +210,10 @@ const Post = () => {
                     }}
                 >
                     {pageData &&
-                        pageData.map((post: Post) => {
+                        pageData.map((post: PostResponseData) => {
                             const moreBtn = currentUser === post.userName
 
-                            return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
+                            return <PostCard key={post.id} {...post} isDetailPost={false} postId={post.id} moreBtn={moreBtn} />
                         })}
                     <div ref={endOfListRef} />
                 </div>

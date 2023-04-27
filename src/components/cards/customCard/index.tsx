@@ -25,7 +25,7 @@ import { CustomCardProps } from '@/types/Card'
 * @date 2023.04.23
 * @author 임성열
  */
-function CustomCard({ profileImg, userName, timeStamp, children, moreBtn }: CustomCardProps) {
+function CustomCard({ profileImg, userName, timeStamp, children, moreBtn, moreBtnFn }: CustomCardProps) {
     // onMoreClick(id, callbackFunction) postCard moreBtn, CommentCard morebtn onclick
     // props-> props.fns { onClickMore: () => () } || helperFunction 
     // CommentCard랑 PostCard 안에 각각 function 만들어도 되구요
@@ -40,7 +40,7 @@ function CustomCard({ profileImg, userName, timeStamp, children, moreBtn }: Cust
                         title={userName}
                         subheader={timeStamp && timeStamp}
                         action={ moreBtn &&
-                            <IconButton sx={{ width: '1.5em', height: '1.5em' }} onClick={() => console.log('clicked')}>
+                            <IconButton sx={{ width: '1.5em', height: '1.5em' }} onClick={moreBtnFn}>
                                 <MoreHorizIcon sx={{ fontSize: '0.75em' }} />
                             </IconButton>
                         }

@@ -1,3 +1,4 @@
+import { Snackbar } from '@mui/material'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material'
 import theme from '@/styles/styles'

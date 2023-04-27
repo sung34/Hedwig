@@ -1,7 +1,13 @@
 import { CommentCardData } from '@/types/Card'
 import CustomCard from '../customCard'
-import { timeSince } from '../timeSince'
-import { StyledCardContent } from '../styles'
+
+import { StyledCardContent, StyledCardInput } from '../styles'
+import { timeSince } from '@/utils/timeSince'
+import { useState } from 'react'
+import CustomDrawer, { COMMENT_UTIL_TYPE, DrawerType } from '@/components/customDrawer'
+import CommentEdit from '../commentEdit'
+import { useMutation } from 'react-query'
+import { updateComment } from '@/apis/Comment'
 
 /**
  * @example 
@@ -20,22 +26,54 @@ import { StyledCardContent } from '../styles'
  * @date 2023.04.23
  * @author 임성열
  */
-function CommentCard({ commentId, profileImg, userName, content, createdAt, updatedAt, moreBtn }: CommentCardData) {
-
-    // 댓글 본문에 들어갈 내용
-    const bodyContent = (): React.ReactNode => <StyledCardContent>{content}</StyledCardContent>
+function CommentCard({ commentId, userName, content, createdAt, updatedAt, moreBtn }: CommentCardData) {
+    const [contetReadonly, setContetReadonly] = useState<boolean>(true)
+    const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false)
 
     // 작성시간과 수정시간이 같다면 작성된 시간 기준으로 문자열 생성
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
-    const timeStamp = createdAt === updatedAt 
-                        ? timeSince(createdAt) + ' 작성됨' 
-                        : timeSince(updatedAt) + ' 수정됨'
-      
+    const timeStamp = createdAt.toString() === updatedAt.toString() ? timeSince(createdAt) + ' 작성됨' : timeSince(updatedAt) + ' 수정됨'
+   
+    const toggleCommentDrawer = () => {
+        setIsCommentDrawerOpen((prev) => !prev)
+    }
+
+    const toggleReadOnly = () => {
+        setContetReadonly((prev) => !prev)
+    }
+
+    const commentDrawerProps = {
+        type: COMMENT_UTIL_TYPE as DrawerType,
+        id: commentId,
+        isOpen: isCommentDrawerOpen,
+        commentFn: toggleReadOnly,
+    }
+
+    const { mutate } = useMutation((variables: { content: string; commentId: number }) => updateComment(variables), {
+        onSuccess: () => {
+            // invalidate query
+        },
+        onError: (error) => {
+            alert(error)
+        },
+    })
+
+    const handleCommentUpdate = (updatedContent: string) => {
+        mutate({ content: updatedContent, commentId: commentId })
+    }
+
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <CustomCard profileImg={profileImg} userName={userName} timeStamp={timeStamp} moreBtn={moreBtn}>
-            {bodyContent()}
-        </CustomCard>
+        <>
+            <CustomCard profileImg={'/default.png'} userName={userName} timeStamp={timeStamp}  moreBtn={moreBtn} moreBtnFn={toggleCommentDrawer}>
+                {contetReadonly ? (
+                    <StyledCardContent>{content}</StyledCardContent>
+                ) : (
+                    <CommentEdit initialContent={content} isReadOnly={false} onSubmit={handleCommentUpdate} />
+                )}
+            </CustomCard>
+            <CustomDrawer {...commentDrawerProps} toggleDrawer={toggleCommentDrawer } isOpen={isCommentDrawerOpen}/>
+        </>
     )
 }
 

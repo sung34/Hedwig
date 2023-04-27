@@ -93,12 +93,15 @@ export const StyledCardInput = styled(TextField)<CardProps>(({ theme }) => ({
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
             borderColor: 'transparent',
+            border: 'none'
         },
         '&:hover fieldset': {
             borderColor: 'transparent',
+            border: 'none'
         },
         '&.Mui-focused fieldset': {
             borderColor: 'transparent',
+            border: 'none'
         },
     },
 }))
