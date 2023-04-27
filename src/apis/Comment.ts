@@ -1,17 +1,20 @@
-
-import { Comment } from '@/types/Comment'
+import { CommentRequest, CommentUpdateRequest } from '@/types/Comment'
 import { axiosInstance } from './axios'
 
-export const createComment = async (  postId: number, content: string ) => {
-    const { data } = await axiosInstance.post<Comment>(`/comment/${postId}`, content)
-    return data
-}
-export const updateComment = async ( postId: number, content: string ) => {
-    const { data } = await axiosInstance.put<Comment>(`/comment/${postId}`, content)
-    return data
-}
-export const deleteComment = async ( postId: number ) => {
-    const { data } = await axiosInstance.delete<Comment>(`/comment/${postId}`)
-    return data
+export const getComments = async (postId: number) => {
+    const response = await axiosInstance.get(`/comment/${postId}`)
+    return response.data
 }
 
+export const createComment = async ({ postId, content }: CommentRequest) => {
+    const response = await axiosInstance.post(`/comment`, { postId, content })
+    console.log(response)
+}
+export const updateComment = async ({ commentId, content }: CommentUpdateRequest) => {
+    const response = await axiosInstance.put(`/comment/${commentId}`, content)
+    console.log(response)
+}
+export const deleteComment = async (commentId: number) => {
+    const response = await axiosInstance.delete(`/comment/${commentId}`)
+    console.log(response)
+}

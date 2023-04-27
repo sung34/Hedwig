@@ -1,8 +1,8 @@
-import { PostRequest, Post } from '@/types/Post'
+import { PostRequestData } from '@/types/Post'
 import { axiosInstance } from './axios'
 
-export const createPost = async (createPostData: PostRequest) => {
-    const { data } = await axiosInstance.post<Post>('/post', createPostData, {
+export const createPost = async (newData: PostRequestData) => {
+    const { data } = await axiosInstance.post('/post', newData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -11,27 +11,27 @@ export const createPost = async (createPostData: PostRequest) => {
 }
 
 export const getPost = async (id: number) => {
-    const response = await axiosInstance.get(`/post/${id}`)
-    return response.data
+    const { data } = await axiosInstance.get(`/post/${id}`)
+    return data
 }
 
 export const getPosts = async () => {
-    const response = await axiosInstance.get('/post')
-    return response.data
+    const { data } = await axiosInstance.get('/post')
+    return data
 }
 
 
-export const updatePost = async (postId: number, content: string, img?: File) => {
-    const response = await axiosInstance.put(`/post/${postId}`, { content, img })
-    return alert(response.data)
+export const updatePost = async (postId: number, newData: PostRequestData) => {
+    const { data } = await axiosInstance.put(`/post/${postId}`, newData)
+    alert(data)
 }
 
 export const deletePost = async (postId: number) => {
-    const response = await axiosInstance.delete(`/post/${postId}`)
-    return alert(response.data)
+    const { data } = await axiosInstance.delete(`/post/${postId}`)
+    alert(data)
 }
 
 export const likePost = async (postId: number) => {
-    const response = await axiosInstance.post(`/like/${postId}`)
-    return alert(response.data)
+    const { data } = await axiosInstance.post(`/like/${postId}`)
+    alert(data)
 }

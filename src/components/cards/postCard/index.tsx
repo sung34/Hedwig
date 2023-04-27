@@ -10,24 +10,21 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder'
 import Favorite from '@mui/icons-material/Favorite'
 import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline'
 
-
 import CustomCard from '../customCard'
 
 import { useState } from 'react'
 
-import { Post } from '@/types/Post';
-import { useQueryClient } from 'react-query';
-import { likePost } from '@/apis/Post';
-import { timeSince } from '@/utils/timeSince';
-
+import { likePost } from '@/apis/Post'
+import { timeSince } from '@/utils/timeSince'
+import { PostCardData } from '@/types/Card'
+import CustomDrawer, { DrawerType, POST_UTIL_TYPE } from '@/components/customDrawer'
 
 /**
  * @example 
- * <PostCard profileImg={profileImg} userName={userName} content={content} createdAt={createdAt} updatedAt={updatedAt} />
+ * <PostCard userName={userName} content={content} createdAt={createdAt} updatedAt={updatedAt} />
  * 또는
  * <PostCard {{ ...PostCardData, isDetailPost, isLiked }} />
  
- * @property {string} props.profileImg - 프로필 이미지 URL입니다.
  * @property {string} props.userName - 사용자 이름입니다.
  * @property {string} props.content - 게시글 들어갈 내용입니다.
  * @property {Date} props.createdAt - 게시글 작성 시 생성된 Date 객체입니다
@@ -45,11 +42,13 @@ import { timeSince } from '@/utils/timeSince';
  * 
  * @author 임성열
  */
-function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount, commentsCount, isLiked, moreBtn }: Post) {
+function PostCard({ userName, content, createdAt, updatedAt, postId, img, likesCount, commentsCount, isLiked, isDetailPost, moreBtn }: PostCardData) {
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
     const [open, setOpen] = useState(false)
     const [curLikesCount, setCurLikesCount] = useState(likesCount)
+
+    const [isPostDrawerOpen, setIsPostDrawerOpen] = useState(false)
     // 미디어 카드 토글
     const handleClickOpen = () => {
         setOpen(true)
@@ -58,6 +57,11 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
     const handleClose = () => {
         setOpen(false)
     }
+
+    const togglePostDrawer = () => {
+        setIsPostDrawerOpen((prev) => !prev)
+    }
+
     const propCreatedAt = new Date(createdAt)
     const propUpdatedAt = new Date(updatedAt)
 
@@ -65,9 +69,6 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
     const timeStamp = propCreatedAt === propUpdatedAt ? timeSince(propCreatedAt) + ' 작성됨' : timeSince(propUpdatedAt) + ' 수정됨'
 
-    const queryClient = useQueryClient()
-
-    const isDetailPost = false
     const profileImg = '/default.png'
     // 게시글 본문에 들어갈 컴포넌트
     const bodyContent = (): React.ReactNode => {
@@ -75,12 +76,12 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
             <>
                 <StyledCardContent>{content}</StyledCardContent>
                 <Box>
-                    {img && !isDetailPost ? <StyledCardMedia image={img} /> : <StyledCardMedia image={img} onClick={handleClickOpen} />}
+                    {img && !isDetailPost ? <StyledCardMedia image={img.toString()} /> : <StyledCardMedia image={img?.toString()} onClick={handleClickOpen} />}
 
                     {img && open && (
                         <Dialog open={open} onClose={handleClose}>
                             <DialogContent>
-                                <img src={img} style={{ width: '100%' }} />
+                                <img src={img.toString()} style={{ width: '100%' }} />
                             </DialogContent>
                         </Dialog>
                     )}
@@ -96,7 +97,7 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
         return (
             <StyledPostFooter>
                 <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
-                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${id}\n Comment Button Clicked`)}>
+                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={() => console.log(`Post ID: ${postId}\n Comment Button Clicked`)}>
                         <ChatBubbleOutline />
                     </IconButton>
                     <Typography>{commentsCount}</Typography>
@@ -107,7 +108,7 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
                         onClick={(e) => {
                             e.stopPropagation()
                             setLiked((prev) => !prev)
-                            likePost(id)
+                            likePost(postId)
                             setCurLikesCount(liked ? curLikesCount - 1 : curLikesCount + 1)
                         }}
                     >
@@ -118,17 +119,22 @@ function PostCard({ userName, content, createdAt, updatedAt, id, img, likesCount
             </StyledPostFooter>
         )
     }
+    const postDrawerProps = {
+        type: POST_UTIL_TYPE as DrawerType,
+        id: postId,
+        isOpen: isPostDrawerOpen,
+    }
 
     // CustomCard 컴포넌트 레이아웃안의 자식 요소로 전달
     return (
-        <div onClick={() => (window.location.href = `/post/${id}`)}>
-            <Box>
-                <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn}>
-                    {bodyContent()}
-                    {footerContent()}
-                </CustomCard>
-            </Box>
-        </div>
+        <>
+            <CustomCard profileImg={profileImg} userName={userName} timeStamp={isDetailPost ? '' : timeStamp} moreBtn={moreBtn} moreBtnFn={togglePostDrawer}>
+                <div onClick={() => (window.location.href = `/post/${postId}`)}>{bodyContent()}</div>
+                {footerContent()}
+            </CustomCard>
+
+            <CustomDrawer {...postDrawerProps} toggleDrawer={togglePostDrawer} isOpen={isPostDrawerOpen} />
+        </>
     )
 }
 
