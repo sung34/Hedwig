@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { getPost } from '@/apis/Post'
 import PostForm from '@/components/cards/PostForm'
+import { queryKeys } from '@/constants/queryKey'
 
 interface PostInput {
     body: string
@@ -23,7 +24,7 @@ interface PostInput {
 const editDetail = () => {
     const router = useRouter()
     const id = Number(router.query.id)
-    const { data: singlePost, isLoading } = useQuery(['post', id], () => getPost(id))
+    const { data: singlePost, isLoading } = useQuery(queryKeys.post.post(id), () => getPost(id))
 
     // 글쓰기에 추가한 내용 모두 저장 할 함수
     const mutate = async (formData: FormData) => {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import verifyToken from '@/utils/verifyToken'
+import Loader from '@/components/Loader'
 
 const withAuth = (Component: NextPage | React.FC) => {
     const Auth = () => {
@@ -15,7 +16,7 @@ const withAuth = (Component: NextPage | React.FC) => {
         }, [isAuthenticated])
 
         // 인증 진행 중 일 때
-        if (isAuthenticated !== 'SUCCESS') return <>로딩 중..</>
+        if (isAuthenticated !== 'SUCCESS') return <Loader />
         // 인증 완료 & 루트 경로로 접속 시 피드 페이지로 이동
         if (isAuthenticated === 'SUCCESS' && router.pathname === '/') {
             router.push('/post')

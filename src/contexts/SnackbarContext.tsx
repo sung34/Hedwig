@@ -5,6 +5,7 @@ import SnackBar from '@/components/SnackBar'
 export const SnackbarContext = createContext<SnackbarContextProps>({
     snackbarOptions: {
         open: false,
+        AlertComponent: <></>,
     },
     setSnackbarOptions: () => {
         console.warn('setSnackbarIsOpened function not initialized')
@@ -14,6 +15,7 @@ export const SnackbarContext = createContext<SnackbarContextProps>({
 function SnackbarProvider({ children }: SnackbarProviderProps) {
     const [snackbarOptions, setSnackbarOptions] = useState({
         open: false,
+        AlertComponent: <></>,
     })
 
     const value = useMemo(() => {
@@ -22,10 +24,14 @@ function SnackbarProvider({ children }: SnackbarProviderProps) {
 
     return (
         <SnackbarContext.Provider value={value}>
-            <SnackBar />
+            <SnackBar>{snackbarOptions.AlertComponent}</SnackBar>
             {children}
         </SnackbarContext.Provider>
     )
 }
 
 export default SnackbarProvider
+// 성공과 실패 여부에 따른 분기
+// 성공 종류에 따른 분기
+// Snackbar 내부의 Alert를 Children으로 받고,
+// Alert는 다시 props로 메세지를 받게 children prop으로 하위 콘텐츠 구성 가능.

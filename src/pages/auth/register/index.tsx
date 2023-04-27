@@ -12,6 +12,8 @@ import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { SnackbarContext } from '@/contexts/SnackbarContext'
 import { useContext } from 'react'
+import Loader from '@/components/Loader'
+import Alert from '@mui/material/Alert'
 
 function RegisterPage() {
     const router = useRouter()
@@ -19,7 +21,7 @@ function RegisterPage() {
     const { mutate, isLoading } = useMutation(register, {
         onSuccess: (data) => {
             setCookie('accessToken', data.accessToken, { path: '/', maxAge: data.content.exp - data.content.iat })
-            setSnackbarOptions({ ...snackbarOptions, open: true })
+            setSnackbarOptions({ ...snackbarOptions, open: true, AlertComponent: <Alert severity={'success'}> 회원가입 성공 !</Alert> })
             router.push('/post')
         },
         onError: (err: AxiosError) => {
@@ -30,7 +32,7 @@ function RegisterPage() {
         router.back()
     }
 
-    if (isLoading) return <>loading...</>
+    if (isLoading) return <Loader />
     return (
         <>
             <IconButton onClick={onArrowBackClick} href="/post" aria-label="back" sx={{ color: '#5c940d', position: 'absolute', top: '10px', left: '10px' }}>
