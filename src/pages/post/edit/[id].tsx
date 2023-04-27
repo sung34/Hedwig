@@ -1,6 +1,6 @@
 import { getPost, getPosts } from '@/apis/Post'
 import { axiosInstance } from '@/apis/axios'
-import { Post } from '@/types/Post'
+
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -9,7 +9,7 @@ import PostCard from '@/components/cards/postCard'
 import withAuth from '@/routes/ProtectedRoute'
 
 type Props = {
-    post: Post
+    post: string
 }
 // export const getStaticPaths: GetStaticPaths = async () => {
 //     const res = await fetch(process.env.customKey + `/post`)

@@ -3,6 +3,11 @@ export interface CommentRequest {
   postId: number
 }
 
+export interface CommentUpdateRequest {
+  commentId: number
+  content: string
+}
+
 export interface Comment extends CommentRequest {
   commentId: number
   userName: string

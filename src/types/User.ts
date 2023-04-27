@@ -1,4 +1,5 @@
-import { Post } from './Post'
+import { PostResponseData } from "./Post"
+
 
 export interface User {
     username: string
@@ -6,6 +7,6 @@ export interface User {
 
 export interface UserResponse extends User {
     likes: number
-    posts: Post[]
+    posts: PostResponseData[]
 }
 

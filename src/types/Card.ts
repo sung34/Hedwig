@@ -1,3 +1,6 @@
+import { Dispatch, SetStateAction } from "react"
+import { PostResponseData } from "./Post"
+
 /**
  * CardData 타입입니다.
  * @see {@link PostCardData} | {@link CommentCardData}
@@ -18,7 +21,6 @@ export type CardDataType = PostCardData | CommentCardData
  * @author 임성열
  */
 interface CardData {
-    profileImg: string
     userName: string
     content: string
     createdAt: Date
@@ -41,10 +43,12 @@ interface CardData {
  */
 export interface PostCardData extends CardData {
     postId: number
-    img?: string
-    likeCount: number
-    commentCount: number
+    img?: FormData
+    likesCount: number
+    commentsCount: number
     isLiked: boolean
+    moreBtn: boolean
+    isDetailPost: boolean
 }
 
 /**
@@ -74,5 +78,6 @@ export interface CustomCardProps {
     userName: string
     timeStamp: string
     moreBtn: boolean
+    moreBtnFn?: () => void
     children: React.ReactNode
 }

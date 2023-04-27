@@ -24,13 +24,18 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Post } from '@/types/Post'
+
 
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
 import { verify } from '@/apis/Auth';
 import withAuth from '@/routes/ProtectedRoute'
+import { PostResponseData } from '@/types/Post'
+import { getComments } from '@/apis/Comment'
+import CommentCard from '@/components/cards/commentCard'
+import { Comment } from '@/types/Comment'
+import CommentInput from '@/components/cards/commentInput'
 
 
 
@@ -68,45 +73,16 @@ const navStyles = {
 //     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....
 
 const Post = () => {
-    // /**
-    //  * 게시글에 관련된 queryKeys
-    //  *
-    //  * @property allPosts - 모든 게시글 상태를 나타내는 쿼리 키
-    //  * @property post - postId에 해당하는 게시글의 상태를 나타내는 쿼리 키
-    //  * @property likedPosts - 현재 로그인한 사용자가 좋아요한 모든 게시글의 상태를 나타내는 쿼리 키
-    //  * @property postLike - postId에 해당하는 게시글의 좋아요 상태를 나타내는 쿼리 키
-    //  */
-    // const postKeys = {
-    //     /**
-    //      * allPosts: 모든 게시글 상태를 나타내는 쿼리 키
-    //      */
-    //     allPosts: ['posts'] as const,
-
-    //     /**
-    //      * post: postId에 해당하는 게시글의 상태를 나타내는 쿼리 키
-    //      * @param postId - 조회할 게시글의 ID
-    //      */
-    //     post: (postId: number) => [...postKeys.allPosts, { postId }] as const,
-
-    //     /**
-    //      * likedPosts: 현재 로그인한 사용자가 좋아요한 모든 게시글의 상태를 나타내는 쿼리 키
-    //      */
-    //     likedPosts: () => [...postKeys.allPosts, 'liked'] as const,
-
-    //     /**
-    //      * postLike: postId에 해당하는 게시글의 좋아요 상태를 나타내는 쿼리 키
-    //      * @param postId - 좋아요 상태를 조회할 게시글의 ID
-    //      */
-    //     postLike: (postId: number) => [...postKeys.allPosts, postId, 'like'] as const,
-    // }
-    // // const { data: likedPosts } = useQuery(postKeys.likedPosts(), getLikedPosts)
-
+    
     // 토큰에 들어있는 암호 정보속에 userName을 가져올수 있다면....    }
     const { data: allPost, isLoading } = useQuery('posts', getPosts)
 
     const { data: userdata } = useQuery('userdata', verify)
     const currentUser = userdata?.content.username
 
+
+    
+    
     const [value, setValue] = useState('main')
     const [btValue, setBtValue] = useState('home')
     const [drawerState, setDrawerState] = useState(false)
@@ -161,6 +137,26 @@ const Post = () => {
     if (isLoading) {
         return <div>로딩중...</div>
     }
+
+    const dummy = {
+        commentId: 2,
+        content: "2342",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userName: "user",
+
+    }
+    const postDummy = {
+        postId: 2,
+        content: "2342",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userName: "user",
+        likesCount: 5,
+        commentsCount: 44,
+         isLiked: true
+ 
+    }
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Link href="/post">
@@ -199,30 +195,18 @@ const Post = () => {
                         paddingBottom: '75px',
                     }}
                 >
-                    {allPost &&
-                        allPost.map((post: Post) => {
-                            /** 동일한 유저가 좋아요 했다는것을 어떻게 파악할까  */
-                            // loginUser 가 post에 있는 userName과 같은가?
+                    {/* {allPost &&
+                        allPost.map((postResData: PostResponseData) => {
+                            const moreBtn = currentUser === postResData.userName
 
-                            // const postData = {
-                            //     postId: post.id,
-                            //     userName: post.userName,
-                            //     profileImg: '/default.png',
-                            //     content: post.content,
-                            //     img: post.img,
-                            //     createdAt: new Date(post.createdAt),
-                            //     updatedAt: new Date(post.updatedAt),
-                            //     likeCount: post.likesCount,
-                            //     commentCount: post.commentsCount,
-                            //     isLiked: post.isLiked,
-                            //     isDetailPost: false,
-                            //     moreBtn: currentUser === post.userName,
-                            //     commentOnly: false,
-                            // }
-                            const moreBtn = currentUser === post.userName
-
-                            return <PostCard key={post.id} {...post} moreBtn={moreBtn} />
-                        })}
+                            return <PostCard key={postResData.id} {...postResData} moreBtn={moreBtn} />
+                        })} */}
+                        {/* { comments.map((comment: Comment)=> {
+                            return <CommentCard key={comment.commentId} {...comment} moreBtn={true} />
+                        })} */}
+                        <PostCard {...postDummy} isDetailPost={true} moreBtn={true} />
+                        <CommentInput profileImg='123' userName='user1'/>
+                        <CommentCard  {...dummy} moreBtn={true} />
                 </div>
             </div>
 
