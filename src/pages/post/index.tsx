@@ -98,6 +98,7 @@ const Post = () => {
 
     const userLogout = (): void => {
         logout()
+        router.push('/')
     }
 
     const handleTouchStart = () => {
