@@ -25,7 +25,12 @@ function RegisterPage() {
             router.push('/post')
         },
         onError: (err: AxiosError) => {
-            console.log(`로그인 에러: ${err}`)
+            console.log(`회원가입 에러: ${err}`)
+            setSnackbarOptions({
+                ...snackbarOptions,
+                open: true,
+                AlertComponent: <Alert severity={'error'}> 회원가입 에러</Alert>,
+            })
         },
     })
     const onArrowBackClick = () => {

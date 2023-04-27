@@ -34,6 +34,11 @@ function LoginPage() {
         },
         onError: (err: AxiosError) => {
             console.log(`로그인 에러: ${err}`)
+            setSnackbarOptions({
+                ...snackbarOptions,
+                open: true,
+                AlertComponent: <Alert severity={'error'}> 로그인 에러</Alert>,
+            })
         },
     })
 
