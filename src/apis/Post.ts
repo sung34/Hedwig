@@ -23,15 +23,15 @@ export const getPosts = async () => {
 
 export const updatePost = async (postId: number, newData: PostRequestData) => {
     const { data } = await axiosInstance.put(`/post/${postId}`, newData)
-    alert(data)
+    //alert(data)
 }
 
 export const deletePost = async (postId: number) => {
     const { data } = await axiosInstance.delete(`/post/${postId}`)
-    alert(data)
+    //alert(data)
 }
 
 export const likePost = async (postId: number) => {
     const { data } = await axiosInstance.post(`/like/${postId}`)
-    alert(data)
+    //alert(data)
 }
