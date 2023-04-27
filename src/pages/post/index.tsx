@@ -29,7 +29,7 @@ import { Post } from '@/types/Post'
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth'
+import { logout, verify } from '@/apis/Auth'
 import withAuth from '@/routes/ProtectedRoute'
 
 // tab 컴포넌트 스타일 객체
@@ -96,8 +96,8 @@ const Post = () => {
         setDialogState(!dialogState)
     }
 
-    const logout = (): void => {
-        //TODO 페이지만 이동할게 아니라 api 호출을 통해서 로그아웃 로직을 요청해야한다!
+    const userLogout = (): void => {
+        logout()
         router.push('/')
     }
 
@@ -207,7 +207,7 @@ const Post = () => {
                 </DialogContent>
                 <DialogActions>
                     {/* TODO 로그아웃 요청 메소드 추가할것 */}
-                    <Button onClick={logout}>로그아웃</Button>
+                    <Button onClick={userLogout}>로그아웃</Button>
                     <Button onClick={toggleDialog} autoFocus>
                         취소
                     </Button>

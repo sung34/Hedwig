@@ -11,6 +11,11 @@ export const login = async (signInData: SignInRequest) => {
     return data
 }
 
+export const logout = async () => {
+    const { data } = await axiosInstance.post<AuthResponse>('/logout')
+    return data
+}
+
 export const verify = async () => {
     const { data } = await axiosInstance.get<userPayload>('/verify')
     return data
