@@ -14,7 +14,7 @@
 :----: | :----: | :----: | :----: | :----: 
 <img src="https://avatars.githubusercontent.com/u/69203535?v=4" style="width: 180px;" /> | <img src="https://avatars.githubusercontent.com/u/56331400?v=4" style="width: 150px" /> | <img src="https://avatars.githubusercontent.com/u/120437898?v=4" style="width: 150px;" /> | <img src="https://avatars.githubusercontent.com/u/106302236?v=4" style="width: 150px;" /> | <img src="https://avatars.githubusercontent.com/u/76941552?v=4" style="width: 150px"/>
 [johnphjkr](https://github.com/johnphjkr) | [jyc-coder](https://github.com/jyc-coder) | [sung34](https://github.com/sung34) | [bongsee](https://github.com/bongsee) |  [ronieo](https://github.com/ronieo)
-[BE]<br> [BE, FE 배포]<br>|[메인 페이지]<br>[메인 페이지 하단탭]<br>[게시글 테스트코드]<br>[무한스크롤]<br>[수정 페이지]<br>[CustomComponents]<br>[게시글수정 및 삭제]<br>|[게시글상세]<br>[댓글]<br>[댓글 수정/삭제]<br>[게시글 moreButton]<br>[글로벌 스타일]<br> [게시글상세]<br>[게시글수정및삭제]<br>[메인페이지 상단탭]<br>|[회원가입]<br>[로그인]<br>[인증]<br>[로딩, 스낵바 컴포넌트]<br>|[글쓰기]<br>
+[BE]<br> [BE, FE 배포]<br>|[메인 페이지]<br>[메인 페이지 하단탭]<br>[무한스크롤]<br>[게시글 테스트코드]<br>[게시글 수정 및 삭제]<br>[수정 페이지]<br>[CustomComponents]<br>|[메인페이지 상단탭]<br>[게시글상세]<br>[게시글 수정 및 삭제]<br>[게시글 moreButton]<br>[댓글]<br>[댓글 수정/삭제]<br>[글로벌 스타일]<br>|[회원가입]<br>[로그인]<br>[인증]<br>[로딩, 스낵바 컴포넌트]<br>|[글쓰기]<br>
 
 <br/>
 
@@ -29,17 +29,14 @@
 - 유저는 게시글을 클릭 해 게시글 상세 페이지로 진입 할 수 있습니다.
   - 게시글 상세 페이지에서 타 유저의 댓글을 확인 할 수 있으며 댓글도 작성할 수 있습니다.
   - 게시글 상세 페이지에서 자신이 작성한 댓글은 수정 및 삭제가 가능 합니다.
-- 현재 로그인된 유저는 자신이 작성한 글/댓글에만 더보기 버튼이 나타나며 클릭시 수정/삭제 drawer가 나타납니다.
-  - 수정을 클릭하면 dialog과 함께 확인 시 수정 페이지로 이동합니다.
-  - 삭제를 클릭하면 글/댓글을 삭제하고 메인 페이지로 돌아옵니다.
 - 메인피드 기준 하단 네비게이션 왼쪽부터 <b> 글쓰기 | 홈 | 프로필</b>(으)로 구성되어 있습니다.
   - 글쓰기 네비게이션을 클릭 시 글쓰기 페이지로 이동합니다.
     - 글쓰기 페이지에서는 최대 150자 까지 작성할 수 있습니다.
-    - 글쓰기 페이지에서는 한 가지의 미디어만 추가 할 수 있습니다. (이미지/gif/동영상)
+    - 글쓰기 페이지에서는 한 가지의 미디어만 추가 할 수 있습니다.
     - 글쓰기 페이지에서 다른 미디어를 추가 시 교체 됩니다.
   - 홈 네비게이션을 클릭 시, 메인 피드로 이동합니다.
-  - 프로필 네비게이션을 클릭 시, 로그아웃 drawer가 출력됩니다.
-    - 로그아웃 drawer를 클릭 시, 로그아웃 팝업이 출력됩니다.
+  - 프로필 네비게이션을 클릭 시, 로그아웃 슬라이더가 출력됩니다.
+    - 로그아웃 슬라이더를 클릭 시, 로그아웃 팝업이 출력됩니다.
     - 로그아웃을 클릭하면 다시 인증: 로그인 또는 회원가입 권유 페이지로 이동합니다.
 
 <br/>
@@ -58,7 +55,7 @@
 <table>
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031946-6d225d53-7fc2-4fd2-9e37-c76146f39a74.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 로그인 또는 회원가입 권유 페이지
@@ -68,7 +65,7 @@
 
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031944-8532e6b9-791f-48d9-907b-12726c461935.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 회원가입 페이지
@@ -78,7 +75,7 @@
 
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031943-b03cd8da-9ac0-47be-9aae-b1bea3a6f868.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 로그인 페이지
@@ -95,26 +92,30 @@
 <table>
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031945-bddba2bc-416d-4512-b5c8-cfc5fd808383.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 메인 페이지
   </div>
 </th>
+
+
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235032754-bd206769-b6a3-41b7-af48-1cd93a19a03c.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- 🦉 메인 페이지
+ 🦉 LIKED - 내가 좋아요한 페이지
   </div>
 </th>
+
+
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235032753-68f57ed2-f7db-4c7c-9c74-cb3df7e721e8.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
- 🦉 메인 페이지
+ 🦉 MY- 내가 작성한 글 페이지
   </div>
 </th>
 </table>
@@ -137,7 +138,7 @@
 
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031945-bddba2bc-416d-4512-b5c8-cfc5fd808383.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 홈 - 메인 페이지 랜더링
@@ -147,7 +148,7 @@
 
 <th style={{width: "25%"}}>
   <div style={{width: "50%"}>
-    <img src="https://user-images.githubusercontent.com/76941552/234176891-6e69308f-973f-4afa-80d6-16c786359d39.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
+    <img src="https://user-images.githubusercontent.com/76941552/235031942-72e0566e-be6a-4214-a0ac-31c185efa966.png" style={{width: "50%", height: "50%", objectFit: "contain"}}/>
   </div>
   <div align="center">
  🦉 로그아웃 - 터치 후 로그아웃
