@@ -9,12 +9,14 @@ import HomeIcon from '@mui/icons-material/Home'
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Link from 'next/link'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
+import { useRouter } from 'next/router'
+
 
 import PostCard from '@/components/cards/postCard'
 import { getPosts } from '@/apis/Post'
 import { useQuery } from 'react-query'
-import { verify } from '@/apis/Auth'
+import { verify } from '@/apis/Auth';
 import withAuth from '@/routes/ProtectedRoute'
 
 import Loader from '@/components/Loader'
@@ -85,6 +87,8 @@ const Post = () => {
         }
     }, [isLoading])
 
+    
+
     // 데이터 조각내기
     const getPageData = (allData: any[], pageNumber: number, pageSize: number): any[] => {
         const startIndex = (pageNumber - 1) * pageSize
@@ -92,7 +96,7 @@ const Post = () => {
         return allData?.slice(0, endIndex)
     }
     // 조각낸 데이터
-    const pageData = getPageData(allData, pageNumber, pageSize)
+    const pageData = useMemo(() => getPageData(allData, pageNumber, pageSize), [allData, pageNumber, pageSize]);
 
     // 현재 로그인된 유저와 게시글 데이터의 유저 이름 비교를 위한 코드
     const { data: userdata } = useQuery('userdata', verify)
@@ -103,8 +107,30 @@ const Post = () => {
     const [btValue, setBtValue] = useState<string>('home')
     const [drawerState, setDrawerState] = useState<boolean>(false)
 
+    let myPost = null
+    if (value === 'my') {
+        myPost = allPost?.filter((post: PostResponseData) => post.userName === currentUser)
+    }
+    if (value === 'liked') {
+        myPost = allPost?.filter((post: PostResponseData) => post.isLiked === true)
+    }
+    const [selectedPost, setSelectedPost] = useState(pageData)
+
+    useEffect(() => {
+        if (value === 'my') {
+            setSelectedPost(allPost?.filter((post: PostResponseData) => post.userName === currentUser))
+        } else if (value === 'liked') {
+            setSelectedPost(allPost?.filter((post: PostResponseData) => post.isLiked === true))
+        } else {
+            setSelectedPost(pageData)
+        }
+    }, [value, allPost, currentUser, pageData])
+
+
+    const router = useRouter()
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue)
+        console.log(value)
     }
     const handleBtNavChange = (event: React.SyntheticEvent, newValue: string) => {
         setBtValue(newValue)
@@ -113,8 +139,6 @@ const Post = () => {
     const toggleDrawer  = () => {
         setDrawerState(prev => !prev)
     }
-
- 
 
 
     if (isLoading) {
@@ -144,7 +168,7 @@ const Post = () => {
             </Tabs>
             <div className="CardContainer" style={{ width: '100%' }}>
                 <div style={{ textAlign: 'center' }}>
-                    {/* <CircularProgress /> */}
+                    {/*<CircularProgress color="inherit" />*/}
                 </div>
                 <div
                     style={{
@@ -157,8 +181,8 @@ const Post = () => {
                         paddingBottom: '75px',
                     }}
                 >
-                    {pageData &&
-                        pageData.map((post: PostResponseData) => {
+                    {selectedPost &&
+                        selectedPost.map((post: PostResponseData) => {
                             const moreBtn = currentUser === post.userName
 
                             return <PostCard key={post.id} {...post} isDetailPost={false} postId={post.id} moreBtn={moreBtn} />

@@ -12,13 +12,14 @@ import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline'
 
 import CustomCard from '../customCard'
 
-import { useState } from 'react'
-
-import { likePost } from '@/apis/Post'
+import { MouseEvent, useState } from 'react'
+import { useMutation,  useQueryClient } from 'react-query'
+import {  likePost } from '@/apis/Post'
 import { timeSince } from '@/utils/timeSince'
 import { PostCardData } from '@/types/Card'
 import CustomDrawer, { DrawerType, POST_UTIL_TYPE } from '@/components/customDrawer'
 import { useRouter } from 'next/router'
+import { queryKeys } from '@/constants/queryKey'
 
 /**
  * @example 
@@ -47,8 +48,8 @@ function PostCard({ userName, content, createdAt, updatedAt, postId, img, likesC
     // 게시글 좋아요 표시 여부
     const [liked, setLiked] = useState(isLiked)
     const [open, setOpen] = useState(false)
-    const [curLikesCount, setCurLikesCount] = useState(likesCount)
-    const router = useRouter()
+    const [curLikesCount, setCurLikesCount] = useState(Number(likesCount))
+
     const [isPostDrawerOpen, setIsPostDrawerOpen] = useState(false)
     // 미디어 카드 토글
     const handleClickOpen = () => {
@@ -70,6 +71,20 @@ function PostCard({ userName, content, createdAt, updatedAt, postId, img, likesC
     // 그게 아니라면 수정이 된 것이므로 수정시간을 기준으로 문자열 생성
     const timeStamp = propCreatedAt === propUpdatedAt ? timeSince(propCreatedAt) + ' 작성됨' : timeSince(propUpdatedAt) + ' 수정됨'
 
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation(likePost, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(queryKeys.post.allPosts)
+            setCurLikesCount(liked ? curLikesCount - 1 : curLikesCount + 1)
+        },
+    })
+    const onClickLike = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        setLiked((prev) => !prev)
+        mutate(postId)
+        
+    }
+    const router = useRouter()
     const profileImg = '/default.png'
     // 게시글 본문에 들어갈 컴포넌트
     const bodyContent = (): React.ReactNode => {
@@ -104,15 +119,7 @@ function PostCard({ userName, content, createdAt, updatedAt, postId, img, likesC
                     <Typography>{commentsCount}</Typography>
                 </Box>
                 <Box mr={'0.6em'} sx={{ display: 'flex', position: 'relative' }}>
-                    <IconButton
-                        sx={{ padding: '0', mr: '0.4em' }}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            setLiked((prev) => !prev)
-                            likePost(postId)
-                            setCurLikesCount(liked ? curLikesCount - 1 : curLikesCount + 1)
-                        }}
-                    >
+                    <IconButton sx={{ padding: '0', mr: '0.4em' }} onClick={onClickLike}>
                         {liked ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
                     </IconButton>
                     <Typography>{curLikesCount}</Typography>
