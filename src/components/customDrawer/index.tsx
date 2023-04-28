@@ -122,7 +122,7 @@ function CustomDrawer({ type, id, isOpen, toggleDrawer, commentFn }: CustomDrawe
                         return {
                             title: '게시글을 수정하는 페이지로 이동하시겠습니까?',
                             onConfirmClick: () => {
-                                router.push(`/edit/${id}`)
+                                router.push(`/post/edit/${id}`)
                                 toggleAll()
                             },
                         }
