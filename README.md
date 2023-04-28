@@ -43,7 +43,7 @@
 
 ## ⏱ Hedwig작업과정
 - 작업 기간 : 2023.04.17 ~ 2023.04.27
-- 서비스 주소: [🦉 Hedwig 🦉]()
+- 서비스 주소: [🦉 Hedwig 🦉](http://hedwig-fe.eba-afs9gzxm.ap-northeast-2.elasticbeanstalk.com/auth)
 - 팀 레포지토리 주소 : [Hedwig ](https://github.com/FE4react5/Hedwig)
 - 팀 깃 프로젝트 태스크보드 주소: [Hedwig Project Board](https://github.com/orgs/FE4react5/projects/1)
 - 팀 작업과정 노션문서 주소: [Hedwig Notion](https://glowing-bit-b91.notion.site/Hedwig-5-SNS-19daae953182477899ffee4e58cc3d9c)
