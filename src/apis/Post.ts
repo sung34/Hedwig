@@ -7,31 +7,31 @@ export const createPost = async (createPostData: FormData) => {
             'Content-Type': 'multipart/form-data',
         },
     })
-    console.log(data)
+
 }
 
 export const getPost = async (id: number) => {
-    const { data } = await axiosInstance.get(`/post/${id}`)
-    return data
+    const response = await axiosInstance.get(`/post/${id}`)
+    return response.data
 }
 
 export const getPosts = async () => {
-    const { data } = await axiosInstance.get('/post')
-    return data
+    const response = await axiosInstance.get('/post')
+    return response.data
 }
 
 
 export const updatePost = async (postId: number, newData: PostRequestData) => {
-    const { data } = await axiosInstance.put(`/post/${postId}`, newData)
-    alert(data)
+    const response = await axiosInstance.put(`/post/${postId}`, newData)
+
 }
 
 export const deletePost = async (postId: number) => {
-    const { data } = await axiosInstance.delete(`/post/${postId}`)
-    alert(data)
+    const response = await axiosInstance.delete(`/post/${postId}`)
+
 }
 
 export const likePost = async (postId: number) => {
-    const { data } = await axiosInstance.post(`/like/${postId}`)
-    alert(data)
+   const response = await axiosInstance.post(`/like/${postId}`)
+
 }
